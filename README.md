@@ -28,6 +28,10 @@ The goal of this project is to simulate a production network using code.
 
 ## Diagram
 
+*  This topology diagram will be updated as the topology evolves.
+
+![data_platform_diagram](lib/images/data_platform.png)
+
 ## Prerequistes
 
 ## Setting up your environment
