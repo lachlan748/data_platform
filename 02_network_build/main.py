@@ -30,6 +30,7 @@ if 'data_platform' in [lab.title for lab in all_labs]:
         lab.remove()
     except Exception as e:
         print(f"Unable to stop data_platform lab, error: {e}")
+    print(f"\ndata_platform has been successfully deleted..")
 
 else:
     print(f"\ndata_platform doesn't exist, creating lab..")
@@ -107,15 +108,14 @@ else:
 
         # set sample bootstrap config for spine + leaf
         print(f"\nBootstrapping router configs..")
-        for device_name in nodes:
-            node.config = (f"hostname {device_name}\n!\nntp server 1.2.3.4")
+        for node in nodes:
+            node.config = (f"hostname {node.label}\n!\nntp server 1.2.3.4")
 
         # start nodes incrementally
         print(f"\nStarting node: ext_conn")
         ext_conn.start()
         print(f"\nStarting node: unmanaged_switch")
         unmanaged_switch.start()
-        spine1.start()
         for node in nodes:
             print(f"\nStarting node: {node}")
             node.start()
