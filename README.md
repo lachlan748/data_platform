@@ -11,7 +11,7 @@ The goal of this project is to simulate a production network using code.
 
 *  Generate and deploy configuration files using Ansible Roles + Netbox
 
-*  Connect immutable servers to the network and simulate production
+*  Connect immutable servers to the topology and simulate production
    network traffic including unicast and multicast data flows.
 
 *  Monitor data flows, resource utliisation and telemetry data, visualize
