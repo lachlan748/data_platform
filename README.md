@@ -4,17 +4,18 @@ The goal of this project is to simulate a production network using code.
 
 ## Objectives
 
-*  Deploy immutable virtual network infrastucture on Cisco Modeling Labs 2.1
-   via API calls.
+*  Deploy immutable network infrastucture on Cisco Modeling Labs 2.1
+   using the virl2_client library. 
 
 *  Store the network IPAM data in Netbox
 
 *  Generate and deploy configuration files using Ansible Roles + Netbox
 
-*  Connect immutable virtual servers to the network and simulate production
+*  Connect immutable servers to the network and simulate production
    network traffic including unicast and multicast data flows.
 
-*  Monitor traffic flow and telemetry data, visualize using Kibana/Grafana
+*  Monitor data flows, resource utliisation and telemetry data, visualize
+   using Kibana/Grafana.
 
 ## Method
 
