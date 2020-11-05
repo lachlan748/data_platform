@@ -9,3 +9,40 @@
         name: '*'
         state: latest
       register: dnf_output
+
+    - name: install epel-release for AWX
+      dnf:
+        name: epel-release
+        state: latest
+      register: epel_release_output
+
+    - name: install additional packages
+      dnf:
+        name: '{{ item }}'
+        state: latest
+      loop:
+        - git
+        - gcc
+        - gcc-c++
+        - nodejs
+        - gettext
+        - device-mapper-persistent-data
+        - lvm2
+        - python3-pip
+      register: others_output
+
+    - name: Add Docker repo
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+
+    - name: install Docker
+      package:
+        name: docker-ce
+        state: latest
+
+    - name: start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
