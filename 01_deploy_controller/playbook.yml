@@ -1,4 +1,5 @@
 ---
+# to execute: ansible-playbook playbook.yml -i hosts.yml -u <username> -K
 - hosts: data_controller
   gather_facts: False
   become: yes
