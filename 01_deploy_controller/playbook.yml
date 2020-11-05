@@ -31,7 +31,7 @@
         - python3-pip
       register: others_output
 
-    - name: Add Docker repo
+    - name: add Docker repo
       get_url:
         url: https://download.docker.com/linux/centos/docker-ce.repo
         dest: /etc/yum.repos.d/docker-ce.repo
@@ -62,3 +62,18 @@
         repo: https://github.com/netbox-community/netbox-docker.git
         version: release
         dest: projects/netbox
+
+    - name: copy docker-compose.override.yml over
+      copy:
+        src: ./docker-compose.override.yml
+        dest: projects/netbox/docker-compose.override.yml
+
+    - name: pull netbox image from hub.docker.com
+      community.general.docker_image:
+        name: netboxcommunity/netbox:latest
+        source: pull
+
+    - name: start netbox container
+      community.general.docker_compose:
+        project_src: ./projects/netbox
+        state: present
