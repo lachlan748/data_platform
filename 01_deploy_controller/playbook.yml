@@ -36,13 +36,29 @@
         url: https://download.docker.com/linux/centos/docker-ce.repo
         dest: /etc/yum.repos.d/docker-ce.repo
 
-    - name: install Docker
+    - name: install docker
       package:
         name: docker-ce
         state: latest
 
-    - name: start Docker service
+    - name: start docker service
       service:
         name: docker
         state: started
         enabled: yes
+
+    - name: install docker-compose using pip
+      pip:
+        name: docker-compose
+
+    - name: create projects/netbox directory
+      file:
+        path: projects/netbox
+        state: directory
+        mode: 0755
+
+    - name: git checkout netbox
+      git:
+        repo: https://github.com/netbox-community/netbox-docker.git
+        version: release
+        dest: projects/netbox
