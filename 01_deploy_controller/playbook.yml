@@ -1,0 +1,10 @@
+---
+- hosts: data_controller
+  gather_facts: False
+  become: yes
+  tasks:
+    - name: dnf update
+      dnf:
+        name: '*'
+        state: latest
+      register: dnf_output

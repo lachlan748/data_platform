@@ -1,3 +1,4 @@
+ansible==2.10.2
 flake8==3.8.4
 ipython==7.19.0
 virl2-client==2.1.0

@@ -35,6 +35,12 @@ This topology diagram will be updated as the build evolves.
 
 ## Prerequistes
 
+This build assumes:
+
+1. Cisco CML 2.x address is 192.168.137.252
+2. Node data_controller is running Centos8 and has python3 installed
+3. Your python/ansible source machine's public SSH key has been copied to your data controller.
+
 ## Setting up your environment
 
 WORK IN PROGRESS
