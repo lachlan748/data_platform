@@ -29,7 +29,34 @@
         - device-mapper-persistent-data
         - lvm2
         - python3-pip
+        - vim
+        - nmap-ncat
       register: others_output
+
+    - name: set sysctl overcommit_memory to 1
+      ansible.posix.sysctl:
+        name: vm.overcommit_memory
+        value: '1'
+        state: present
+        reload: yes
+
+    - name: set sysctl net.core.somaxconn to 65535 (for redis)
+      ansible.posix.sysctl:
+        name: net.core.somaxconn
+        value: '65535'
+        state: present
+        reload: yes
+
+    - name: set Transparent Huge Pages (THP) support to disabled (for redis)
+      shell: echo never > /sys/kernel/mm/transparent_hugepage/enabled
+
+    - name: set THP premanently in rc.local
+      blockinfile:
+        path: /etc/rc.local
+        block: |
+          if test -f /sys/kernel/mm/transparent_hugepage/enabled; then
+              echo never > /sys/kernel/mm/transparent_hugepage/enabled
+          fi
 
     - name: add Docker repo
       get_url:
@@ -51,11 +78,23 @@
       pip:
         name: docker-compose
 
+    - name: create docker usergroup
+      group:
+        name: docker
+        state: present
+
+    - name: Add admin user to docker group
+      user:
+        name: lachlanfalconer
+        group: docker
+
     - name: create projects/netbox directory
       file:
         path: projects/netbox
         state: directory
         mode: 0755
+        owner: lachlanfalconer
+        group: docker
 
     - name: git checkout netbox
       git:
@@ -67,13 +106,23 @@
       copy:
         src: ./docker-compose.override.yml
         dest: projects/netbox/docker-compose.override.yml
+        owner: lachlanfalconer
+        group: docker
 
     - name: pull netbox image from hub.docker.com
       community.general.docker_image:
-        name: netboxcommunity/netbox:latest
+        #name: netboxcommunity/netbox:latest
+        name: netboxcommunity/netbox:v2.8.5
         source: pull
 
-    - name: start netbox container
-      community.general.docker_compose:
-        project_src: ./projects/netbox
+    - name: add env variable ALLOWED_HOSTS to env/netbox.env
+      lineinfile:
+        path: projects/netbox/env/netbox.env
+        line: ALLOWED_HOSTS=['*']
+        insertbefore: BOF
         state: present
+
+          # - name: start netbox container
+          #   community.general.docker_compose:
+          #     project_src: ./projects/netbox
+          #     state: present

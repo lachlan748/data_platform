@@ -40,6 +40,7 @@ This build assumes:
 1. Cisco CML 2.x address is 192.168.137.252
 2. Node data_controller is running Centos8 and has python3 installed
 3. Your python/ansible source machine's public SSH key has been copied to your data controller.
+4. Ensure your data_controller hostname is 'localhost', otherwise netbox docker will fail to start.
 
 ## Setting up your environment
 
