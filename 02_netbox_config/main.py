@@ -225,6 +225,27 @@ for node in nodes:
     x = node[-1]
     primary_ip4 = {'address': f'150.1.{x}.{x}/32'}
     interfaces = {}
+    for intf, intf_data in interface_data.items():
+        # create empty dict per interface
+        data = {}
+        # set default parameters
+        name = intf
+        device = None
+        description = None
+        type = intf_data['type']
+        ip = None
+        mode = None
+        enabled = False
+        lag = None
+        tagged_vlans = None
+        untagged_vlan = None
+        data.setdefault(intf.title(), dict(description=description,
+                                           lag=lag, mode=mode, 
+                                           tagged_vlans=tagged_vlans,
+                                           untagged_vlan=untagged_vlan,
+                                           type='virtual', ip=ip,
+                                           enabled=enabled))
+        interfaces.update(data)
     master.setdefault(node, dict(name=node, device_type=device_type,
                                  device_role=device_role, tenant=tenant,
                                  platform=platform, site=site, status=status,

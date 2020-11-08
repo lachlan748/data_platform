@@ -46,7 +46,7 @@ This build assumes:
 
 3. Your python/ansible source machine's public SSH key has been copied to your data controller.
 
-4. Ensure your data_controller hostname is 'localhost', otherwise netbox docker will fail to start.
+4. Ensure your data_controller hostname is 'localhost', otherwise netbox docker may fail to start.
 
 ## Setting up your environment
 
