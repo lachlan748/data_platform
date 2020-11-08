@@ -1,0 +1,507 @@
+import netaddr, pynetbox, re
+from braceexpand import braceexpand
+from pprint import pprint
+
+# set netbox-docker api address and token
+nb = pynetbox.api(
+    'http://192.168.137.100:8000',
+    token='0123456789abcdef0123456789abcdef01234567'
+)
+
+# get tenancy, create new if necessary
+upstart_crow = nb.tenancy.tenants.get(name='upstart_crow')
+if not upstart_crow:
+    upstart_crow = nb.tenancy.tenants.create(
+        name = 'upstart_crow',
+        slug = 'upstart_crow')
+
+
+# get regions
+all_regions = nb.dcim.regions.all()
+def create_region(region):
+    slug = region.lower()
+    if region not in [x.name for x in all_regions]:
+        region = nb.dcim.regions.create(
+            name = region,
+            slug = slug
+            )
+
+# get emea region
+create_region('EMEA')
+emea = nb.dcim.regions.get(name='EMEA')
+
+# check if site LD4 exists
+ld4 = nb.dcim.sites.get(name='LD4')
+if not ld4:
+    ld4 = nb.dcim.sites.create(
+        name = 'LD4',
+        slug = 'ld4')
+
+# get roles as list
+roles = nb.dcim.device_roles.all()
+# add logic to create roles <- UPDATE THIS CODE
+
+# create spine role if it doesn't exist:
+if 'Spine' not in [x.name for x in roles]:
+    Spine = nb.dcim.device_roles.create(
+        name = 'Spine',
+        slug = 'spine',
+        color = 'ff3333')
+
+# create leaf role if it doesn't exist:
+if 'Leaf' not in [x.name for x in roles]:
+    Leaf = nb.dcim.device_roles.create(
+        name = 'Leaf',
+        slug = 'leaf',
+        color = '42ff33')
+
+# get all RIRs
+all_rir = nb.ipam.rirs.all()
+
+# create RIRs
+def create_rir(rir):
+    slug = rir.lower()
+    if rir not in [x.name for x in all_rir]:
+        rir = nb.ipam.rir.create(
+            name = rir,
+            slug = slug
+            )
+
+create_rir('ARIN')
+create_rir('RIPE')
+create_rir('APNIC')
+create_rir('LACNIC')
+create_rir('AFRINIC')
+create_rir('RFC1918')
+create_rir('RFC6598')
+
+# get role ids
+device_roles_data = {}
+for role in roles:
+   role_id = nb.dcim.device_roles.get(name=role)
+   device_roles_data.setdefault(str(role), dict({'id': role_id.id}))
+
+# get ipam role data
+ipam_roles = nb.ipam.roles.all()
+
+# create ipam roles
+def create_ipam_roles(role):
+    slug = role.lower()
+    if role not in [x.name for x in ipam_roles]:
+        role = nb.ipam.roles.create(name=role,
+                   slug=slug,
+                   description=slug
+                   )
+
+create_ipam_roles('development')
+create_ipam_roles('loopback')
+create_ipam_roles('MD')
+create_ipam_roles('OE')
+create_ipam_roles('upstart_crow_mgmt')
+create_ipam_roles('xconnect')
+
+# build dict of ipam_role ids
+ipam_role_data = {}
+for role in ipam_roles:
+    role_id = nb.ipam.roles.get(name=role)
+    ipam_role_data.setdefault(str(role), dict({'id': role_id.id}))
+
+# get prefixes
+prefixes = nb.ipam.prefixes.all()
+
+# define function to create prefixes
+def create_prefix(network, role_type, vlan=None):
+    if str(network) not in [x.prefix for x in prefixes]:
+        role_type = nb.ipam.prefixes.create(
+            prefix = str(network),
+            role = ipam_role_data[role_type]['id'],
+            site = ld4.id,
+            tenant = upstart_crow.id,
+            vlan = vlan,
+            is_pool = True)
+
+# define supernet vars
+xconnect_supernet = netaddr.IPNetwork('192.168.1.0/24')
+loopback_supernet = netaddr.IPNetwork('192.168.240.0/22')
+server_spine_supernet = netaddr.IPNetwork('192.168.244.0/22')
+server_leaf_supernet = netaddr.IPNetwork('192.168.248.0/22')
+mgmt_supernet = netaddr.IPNetwork('10.0.0.0/24')
+ld4_supernet = netaddr.IPNetwork('10.9.0.0/16')
+
+# create supernets
+create_prefix(xconnect_supernet, 'xconnect')
+create_prefix(loopback_supernet, 'loopback')
+create_prefix(server_spine_supernet, 'development')
+create_prefix(server_leaf_supernet, 'development')
+create_prefix(mgmt_supernet, 'upstart_crow_mgmt')
+create_prefix(ld4_supernet, 'upstart_crow_mgmt')
+
+# create vlan groups
+vlan_groups = ['dev-leaf', 'dev-spine']
+for vlan in vlan_groups:
+    new_vlan = nb.ipam.vlan_groups.get(name=vlan)
+    if not new_vlan:
+        new_vlan = nb.ipam.vlan_groups.create(
+            name = vlan,
+            slug = vlan,
+            site = ld4.id
+            )
+
+# add a new manufacturer
+arista = nb.dcim.manufacturers.get(name='Arista')
+if not arista:
+    arista = nb.dcim.manufacturers.create(
+        name = 'Arista',
+        slug = 'arista')
+
+# get Arista manufacturer id
+arista_id = arista.id
+
+# add a new platform
+eos = nb.dcim.platforms.get(name='EOS')
+if not eos:
+    eos = nb.dcim.platforms.create(
+        name = 'EOS',
+        slug = 'eos')
+
+# get EOS platform id
+eos_id = eos.id
+
+# add a new device type
+veos = nb.dcim.device_types.get(model='vEOS')
+if not veos:
+    veos = nb.dcim.device_types.create(
+        model = 'vEOS',
+        manufacturer = arista_id,
+        slug = 'veos')
+
+# get vEOS device_type id
+veos_id = veos.id
+
+# create vEOS interfaces
+veos_interfaces = ['Ethernet{1..19}', 'Management1']
+asserted_list = set()
+# build set of vEOS interfaces
+for port in veos_interfaces:
+    asserted_list.update(braceexpand(port))
+# convert set to dict with additional data
+interface_data = {}
+for port in asserted_list:
+    data = {}
+    mgmt_status = port == 'Management1'
+    intf_type = lambda x: "10gbase-x-sfpp" if x.startswith('Ethernet') else '1000base-t'
+    data.setdefault(port, dict(device_type=veos_id, name=port,
+                               mgmt_only=mgmt_status, type=intf_type(port)))
+    interface_data.update(data)
+
+# add interface template via vEOS to netbox:
+for intf, intf_data in interface_data.items():
+    try:
+        # check if interfaces already exist
+        ifGet = nb.dcim.interface_templates.get(devicetype_id=intf_data['device_type'], 
+                                                name=intf)
+        if ifGet:
+            continue
+        else:
+            # create interfaces if they don't exist
+            ifSuccess = nb.dcim.interface_templates.create(
+                device_type = intf_data['device_type'],
+                name = intf,
+                type = intf_data['type'],
+                mgmt_only = intf_data['mgmt_only'],
+                )
+    except pynetbox.RequestError as e:
+        print(e.error)    
+
+# create list of nodes
+nodes = ['ld4-dev-0000-000-c01', 'ld4-dev-0000-000-c02', 'ld4-dev-0000-000-s01', 'ld4-dev-0000-000-s02']
+
+# create dict of nodes:
+master = {}
+id = 0
+for node in nodes:
+    name = node
+    device_type = veos_id
+    match = re.search(r'c\d+$', node)
+    if match:
+        device_role = device_roles_data['Spine']['id']
+        custom_fields = {'bgp_asn': '65535'}
+    else:
+        device_role = device_roles_data['Leaf']['id']
+        custom_fields = {'bgp_asn': '4294967295'}
+    tenant = upstart_crow.id
+    platform = eos_id
+    site = ld4.id
+    status = 'Staging'
+    interfaces = {}
+    if node == 'ld4-dev-0000-000-c01':
+        primary_ip4 = {'address': '10.9.214.65/32'}
+    elif node == 'ld4-dev-0000-000-c02':
+        primary_ip4 = {'address': '10.9.214.66/32'}
+    elif node == 'ld4-dev-0000-000-s01':
+        primary_ip4 = {'address': '10.9.214.67/32'}
+    elif node == 'ld4-dev-0000-000-s02':
+        primary_ip4 = {'address': '10.9.214.68/32'}
+    # grab interface data from mono-network and store ready for netbox import
+    with open(f"../mono-network/hierarchy_vars/all/upstart_crow/amrs/ld4/development/"
+              f"nonbackbone_eos/veos/eos4_20_15m/{node}/vars.yml") as f:
+        mono_data = yaml.load(f, Loader=yaml.FullLoader)
+        mono_interfaces = mono_data['interfaces']
+        # set interface properties
+        for intf, intf_data in mono_interfaces.items():
+            data = {}
+            state = intf_data['state_enabled'] == True
+            lag = None
+            tagged_vlans = None
+            untagged_vlan = None
+            ip = None
+            for k, v in intf_data.items():
+                if k == 'vlans':
+                    tagged_vlans = intf_data['vlans']
+                elif k == 'native_vlan':
+                    untagged_vlan = intf_data['native_vlan']
+                elif k == 'channel_group':
+                    lag = int(intf_data['channel_group'])
+                elif k == 'ip':
+                    ip = intf_data['ip']
+            mode = None
+            data.setdefault(intf.title(), dict(description=intf_data['description'].lower(),
+                                       lag=lag, mode=mode, 
+                                       tagged_vlans=tagged_vlans,
+                                       untagged_vlan=untagged_vlan,
+                                       type='virtual', ip=ip,
+                                       enabled=state))
+            interfaces.update(data)
+    master.setdefault(node, dict(name=name, device_type=device_type,
+                                 device_role=device_role, tenant=tenant,
+                                 platform=platform, site=site, status=status,
+                                 primary_ip4=primary_ip4,
+                                 custom_fields=custom_fields,
+                                 interfaces=interfaces))
+
+# get vlan data from mono
+vlan_master = {}
+# grab vlan data from mono-network and store ready for netbox import
+with open(f"../mono-network/hierarchy_vars/all/upstart_crow/amrs/ld4/development/"
+          f"nonbackbone_eos/veos/vars.yml") as f:
+    raw_data = yaml.load(f, Loader=yaml.FullLoader)
+    # clean data - remove top level key/value
+    raw_data = raw_data['vlans']
+    for k in raw_data:
+        # build dict of spine, leaf vlan data
+        match = re.search(r'-c0\d', str(k['nodes']))
+        if match:
+            for vlan, vlan_data in k['vlans'].items():
+                vlan_master.setdefault('dev_spine', []).append({vlan: vlan_data})
+        else:
+            for vlan, vlan_data in k['vlans'].items():
+                vlan_master.setdefault('dev_leaf', []).append({vlan: vlan_data})
+        # add vlan_data to master
+        for node in k['nodes']:
+            for vlan, vlan_data in k['vlans'].items():
+                data = {}
+                data['description'] = vlan_data['name']
+                data['enabled'] = True
+                ip = netaddr.IPNetwork(vlan_data['ip'])
+                if ip.prefixlen == 31:
+                    if int(node[-1]) % 2 == 0:
+                        data['ip'] = str(f"{ip[1]}/{ip.prefixlen}")
+                    else:
+                        data['ip'] = str(f"{ip[0]}/{ip.prefixlen}")
+                else:
+                    if int(node[-1]) % 2 == 0:
+                        data['ip'] = str(f"{ip[3]}/{ip.prefixlen}")
+                    else:
+                        data['ip'] = str(f"{ip[2]}/{ip.prefixlen}")
+                data['lag'] = None
+                data['mode'] = None
+                data['tagged_vlans'] = None
+                data['type'] = 'virtual'
+                data['untagged_vlan'] = None
+                master[node]['interfaces'].update({f"Vlan{vlan}": data})
+
+# write master to file for debugging
+with open('test.txt', 'w') as f:
+    f.write(json.dumps(master, indent=4, sort_keys=True))
+
+# create custom field for BGP in Netbox GUI, unable to do this via API.
+
+# get all netbox devices
+netbox_nodes = nb.dcim.devices.all() 
+
+# add master devices to netbox:
+for node, node_data in master.items():
+    # don't create nodes if they exist
+    if node not in [x.name for x in netbox_nodes]:
+    #if node.endswith('c01'):
+        print(f"Adding {node} to nb")
+        new_node = nb.dcim.devices.create(
+            name = node,
+            site = node_data['site'],
+            device_type = node_data['device_type'],
+            platform = node_data['platform'],
+            tenant = node_data['tenant'],
+            device_role = node_data['device_role'],
+            custom_fields = node_data['custom_fields'],
+            local_context_data = {}
+            )
+        for intf, intf_data in node_data['interfaces'].items():
+            # create interfaces outside vEOS interface_template
+            if intf.lower().startswith(('loop', 'vlan')):
+                print(f"Adding {new_node.id}: {node}, {intf} to nb")
+                #continue
+                nbintf = nb.dcim.interfaces.create(
+                    name = intf,
+                    device = new_node.id,
+                    type = intf_data['type'],
+                    description = intf_data['description'],
+                    )
+
+                # add loopback/mgmt ip's to netbox
+                ip_role = lambda x: 'loopback' if x.startswith('loop') else None
+                intip = nb.ipam.ip_addresses.create(
+                    address = intf_data['ip'],
+                    status = 1,
+                    interface =  nbintf.id,
+                    tenant = upstart_crow.id,
+                    role = ip_role(intf),
+                    )
+                if intf.lower() == 'loopback0':
+                    print(f"Setting {intf} as primary management interface in nb")
+                    new_node.primary_ip4 = {'address': intf_data['ip']}
+                    new_node.save()
+
+            elif intf.lower().startswith(('ethernet', 'management1')):
+                # update interfaces inside vEOS
+                print(f"Updating {new_node.id}: {node}, {intf} IP address in nb")
+                nbintf = nb.dcim.interfaces.get(name=intf, device=node)
+                nbintf.description = intf_data['description']
+                nbintf.enabled = intf_data['enabled']
+                if intf_data['enabled'] == True:
+                    nbintf.tags = ['pim', 'bfd']
+                nbintf.save()
+
+                # add ethernet ip's to netbox
+                if intf_data['ip']:
+                    intip = nb.ipam.ip_addresses.create(
+                        address = intf_data['ip'],
+                        status = 1,
+                        interface =  nbintf.id,
+                        tenant = upstart_crow.id,
+                        )
+
+        # create port-channel outside intf loop
+        print(f"Adding {new_node.id}: {node}, Port-Channel1 to nb")
+        mlag_po_intf = nb.dcim.interfaces.create(
+            name = "Port-Channel1",
+            device = new_node.id,
+            # channel groups cannot have members if set to virtual type
+            type = 'lag',
+            mode = 'tagged-all',
+            tags = ['pim', 'bfd'],
+            description = master[node]['interfaces']['Port-Channel1']['description']
+            )
+
+       # add channel-members to channel-group
+        channel_members = ['Ethernet18', 'Ethernet19']
+        for member in channel_members:
+            print(f"Adding {new_node.id}: {node}, binding {member} to "
+                  f"Port-Channel1 in nb")
+            mlag_intf = nb.dcim.interfaces.get(name=member, device=node)
+            try:
+                mlag_intf.lag = {'id': mlag_po_intf.id}
+                mlag_intf.tags = ['pim', 'bfd']
+                mlag_intf.save()
+            except pynetbox.RequestError as e:
+                print(e.error)
+
+# write master to file for debugging
+with open('vlans.txt', 'w') as f:
+    f.write(json.dumps(vlan_master, indent=4, sort_keys=True))
+
+# get development role_id, vlan_group id
+dev = nb.ipam.roles.get(name='development')
+dev_spine = nb.ipam.vlan_groups.get(name='dev-spine')
+dev_leaf = nb.ipam.vlan_groups.get(name='dev-leaf')
+
+# get vlans
+all_vlans = nb.ipam.vlans.all()
+
+# add vlan data to nb
+for vlan_role, vlan_role_data in vlan_master.items():
+    for vlans in vlan_role_data:
+        for vlan_id, vlan_id_data in vlans.items():
+            if vlan_id_data['name'] not in [x.name for x in all_vlans]:
+                if vlan_role == 'dev_spine':
+                    group_id = dev_spine.id
+                else:
+                    group_id = dev_leaf.id
+                # create vlans
+                new_vlan = nb.ipam.vlans.create(
+                    site = ld4.id,
+                    group = group_id,
+                    vid = vlan_id,
+                    name = vlan_id_data['name'],
+                    tenant = upstart_crow.id,
+                    role = dev.id
+                    )
+                # create prefix lists with vlan id
+                create_prefix(vlan_id_data['ip'], 'development', vlan=new_vlan.id)
+
+
+# function to patch cables
+def connect_cables(node_a, node_b, link_a, link_b):
+    link_a = nb.dcim.interfaces.get(device=node_a, name=link_a)
+    link_b = nb.dcim.interfaces.get(device=node_b, name=link_b)
+    # check if link_a/b is connected already
+    if link_a.connection_status == None and link_b.connection_status == None:
+        new_cable = nb.dcim.cables.create(
+            termination_a_type = "dcim.interface",
+            termination_a_id = link_a.id,
+            termination_b_type = "dcim.interface",
+            termination_b_id = link_b.id
+            )
+
+# connect topology
+ld4_dev_c01 = nb.dcim.devices.get(name='ld4-dev-0000-000-c01') 
+ld4_dev_c02 = nb.dcim.devices.get(name='ld4-dev-0000-000-c02')
+ld4_dev_s01 = nb.dcim.devices.get(name='ld4-dev-0000-000-s01')
+ld4_dev_s02 = nb.dcim.devices.get(name='ld4-dev-0000-000-s02')
+ 
+connect_cables(ld4_dev_c01, ld4_dev_c02, 'Ethernet18', 'Ethernet18')
+connect_cables(ld4_dev_c01, ld4_dev_c02, 'Ethernet19', 'Ethernet19')
+connect_cables(ld4_dev_c01, ld4_dev_s01, 'Ethernet17', 'Ethernet17')
+connect_cables(ld4_dev_c02, ld4_dev_s02, 'Ethernet17', 'Ethernet17')
+connect_cables(ld4_dev_s01, ld4_dev_s02, 'Ethernet18', 'Ethernet18')
+connect_cables(ld4_dev_s01, ld4_dev_s02, 'Ethernet19', 'Ethernet19')
+
+# grab amrs, ld4 data
+amrs = nb.dcim.regions.get(name='AMRS')
+ld4 = nb.dcim.sites.get(name='LD4')
+
+# create function to build config_contexts
+def create_config_context(name, regions, sites, weight, data):
+    contexts = nb.extras.config_contexts.all()
+    if name not in [x.name for x in contexts]:
+        if sites is not None:
+            nb.extras.config_contexts.create(
+                name = name,
+                regions = regions,
+                sites = sites,
+                weight = weight,
+                data = data
+                )
+        else:
+            nb.extras.config_contexts.create(
+                name = name,
+                regions = regions,
+                weight = weight,
+                data = data
+                )
+
+
+# create syslog/ntp servers for amrs, ld4
+create_config_context('amrs_syslog_servers', [amrs.id], None, 1000, {'syslog_servers': ['1.1.1.1', '2.2.2.2']})
+create_config_context('amrs_ld4_syslog_servers', [amrs.id], [ld4.id], 2000, {'syslog_servers': ['3.3.3.3', '4.4.4.4']})
+create_config_context('amrs_ntp_servers', [amrs.id], None, 1000, {'ntp_servers': ['5.5.5.5', '6.6.6.6']})
+create_config_context('amrs_ld4_ntp_servers', [amrs.id], [ld4.id], 2000, {'ntp_servers': ['7.7.7.7', '8.8.8.8']})
