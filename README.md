@@ -39,7 +39,10 @@ This build assumes:
 
 1. Cisco CML 2.x address is 192.168.137.252
 
-2. Node data_controller is running Centos 7 and has python3 installed
+2. Node data_controller is running Centos 7 and has python3 installed. Note,
+   I spent several hours trying to run Netbox-docker on Centos 8 but postgres
+   was inaccesible to the netbox container on TCP 5432, hence why I used
+   Centos 7.
 
 3. Your python/ansible source machine's public SSH key has been copied to your data controller.
 
@@ -53,7 +56,7 @@ This build assumes:
 
 3. Start the virtualenv ```source venv/bin/activate```
 
-4. Install the necessary python packages ```pip install requirements.txt```
+4. Install the necessary python packages ```pip install -r requirements.txt```
 
 
 WORK IN PROGRESS
