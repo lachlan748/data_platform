@@ -42,6 +42,8 @@ if not ld4:
 roles = nb.dcim.device_roles.all()
 
 # create roles
+spine = nb.dcim.device_roles.get(name='spine')
+leaf = nb.dcim.device_roles.get(name='leaf')
 if 'spine' not in [x.name for x in roles]:
     spine = nb.dcim.device_roles.create(
         name = 'spine',
@@ -122,14 +124,14 @@ while x < 7:
 
 # create interswitch links for spine1
 x = 11
-while x < 15:
+while x < 16:
     interswitch_link = netaddr.IPNetwork(f"155.1.{x}.0/24")
     create_ip_prefix(interswitch_link, 'interswitch_link', False)
     x += 1
 
-# create interswitch links for spine1
+# create interswitch links for spine2
 x = 21
-while x < 25:
+while x < 26:
     interswitch_link = netaddr.IPNetwork(f"155.1.{x}.0/24")
     create_ip_prefix(interswitch_link, 'interswitch_link', False)
     x += 1
@@ -152,8 +154,16 @@ if not ios:
         name = 'ios',
         slug = 'ios')
 
+# add the iosv device type
+iosv = nb.dcim.device_types.get(model='iosv')
+if not iosv:
+    iosv = nb.dcim.device_types.create(
+        model = 'iosv',
+        manufacturer = ios.id,
+        slug = 'iosv')
+
 # create ios interface template
-ios_interfaces = ['GigabitEthernet/{1..5}']
+ios_interfaces = ['GigabitEthernet0/{0..5}']
 
 # create an empty set
 asserted_ios_interface_list = set()
@@ -168,10 +178,12 @@ for port in asserted_ios_interface_list:
     data = {}
     intf_type = '1000base-t'
     mgmt_status = False
-    if port == 'GigabitEthernet0/1':
+    # set gig0/0 as oob_mgmt port
+    if port == 'GigabitEthernet0/0':
         mgmt_status = True
-    data.setdefault(port, dict(device_type=ios.id, name=port,
+    data.setdefault(port, dict(device_type=iosv.id, name=port,
                                mgmt_only=mgmt_status, type=intf_type))
+    interface_data.update(data)
 
 # add interface template for ios to netbox:
 for intf, intf_data in interface_data.items():
@@ -191,3 +203,32 @@ for intf, intf_data in interface_data.items():
                 )
     except pynetbox.RequestError as e:
         print(e.error)    
+
+# create node list:
+nodes = ['spine1', 'spine2', 'leaf1', 'leaf2', 'leaf3', 'leaf4', 'leaf5']
+
+# create an empty dict to store all device data
+master = {}
+
+# build out master dict for each node
+for node in nodes:
+    device_type = iosv.id
+    device_role = leaf.id
+    # set spine device_role
+    if node.startswith('spine'):
+        device_role = spine.id
+    tenant = upstart_crow.id
+    platform = ios.id
+    site = ld4.id
+    status = 'active'
+    # set primary_ip4
+    x = node[-1]
+    primary_ip4 = {'address': f'150.1.{x}.{x}/32'}
+    interfaces = {}
+    master.setdefault(node, dict(name=node, device_type=device_type,
+                                 device_role=device_role, tenant=tenant,
+                                 platform=platform, site=site, status=status,
+                                 primary_ip4=primary_ip4,
+                                 interfaces=interfaces))
+
+pprint(master)
