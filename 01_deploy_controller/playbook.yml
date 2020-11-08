@@ -4,20 +4,20 @@
   gather_facts: False
   become: yes
   tasks:
-    - name: dnf update
-      dnf:
+    - name: yum update
+      yum:
         name: '*'
         state: latest
-      register: dnf_output
+      register: yum_output
 
     - name: install epel-release for AWX
-      dnf:
+      yum:
         name: epel-release
         state: latest
       register: epel_release_output
 
     - name: install additional packages
-      dnf:
+      yum:
         name: '{{ item }}'
         state: latest
       loop:
@@ -29,6 +29,7 @@
         - device-mapper-persistent-data
         - lvm2
         - python3-pip
+        - python-pip
         - vim
         - nmap-ncat
       register: others_output
@@ -74,9 +75,16 @@
         state: started
         enabled: yes
 
+    - name: upgrade pip
+      pip:
+        name: pip
+        state: latest
+        executable: pip3
+
     - name: install docker-compose using pip
       pip:
         name: docker-compose
+        executable: pip3
 
     - name: create docker usergroup
       group:
@@ -85,7 +93,7 @@
 
     - name: Add admin user to docker group
       user:
-        name: lachlanfalconer
+        name: "{{ ansible_user }}"
         group: docker
 
     - name: create projects/netbox directory
@@ -93,7 +101,7 @@
         path: projects/netbox
         state: directory
         mode: 0755
-        owner: lachlanfalconer
+        owner: "{{ ansible_user }}"
         group: docker
 
     - name: git checkout netbox
@@ -106,23 +114,23 @@
       copy:
         src: ./docker-compose.override.yml
         dest: projects/netbox/docker-compose.override.yml
-        owner: lachlanfalconer
+        owner: "{{ ansible_user }}"
         group: docker
 
     - name: pull netbox image from hub.docker.com
       community.general.docker_image:
-        #name: netboxcommunity/netbox:latest
-        name: netboxcommunity/netbox:v2.8.5
+        name: netboxcommunity/netbox:latest
+        #name: netboxcommunity/netbox:v2.8.5
         source: pull
 
-    - name: add env variable ALLOWED_HOSTS to env/netbox.env
-      lineinfile:
-        path: projects/netbox/env/netbox.env
-        line: ALLOWED_HOSTS=['*']
-        insertbefore: BOF
-        state: present
-
-          # - name: start netbox container
-          #   community.general.docker_compose:
-          #     project_src: ./projects/netbox
+          # - name: add env variable ALLOWED_HOSTS to env/netbox.env
+          #   lineinfile:
+          #     path: projects/netbox/env/netbox.env
+          #     line: ALLOWED_HOSTS=['*']
+          #     insertbefore: BOF
           #     state: present
+
+    - name: start netbox container
+      community.general.docker_compose:
+        project_src: ./projects/netbox
+        state: present
