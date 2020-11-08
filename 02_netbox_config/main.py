@@ -113,36 +113,81 @@ create_ip_aggregate(loopback_agg)
 create_ip_aggregate(interswitch_link_agg)
 create_ip_aggregate(oob_mgmt_agg)
 
-# define prefixes
-loopback_1_agg = netaddr.IPNetwork('150.1.1.0/24')
-loopback_2_agg = netaddr.IPNetwork('150.2.2.0/24')
-loopback_3_agg = netaddr.IPNetwork('150.3.3.0/24')
-loopback_4_agg = netaddr.IPNetwork('150.4.4.0/24')
-loopback_5_agg = netaddr.IPNetwork('150.5.5.0/24')
-loopback_6_agg = netaddr.IPNetwork('150.6.6.0/24')
-interswitch_link_11 = netaddr.IPNetwork('155.1.11.0/24')
-interswitch_link_12 = netaddr.IPNetwork('155.1.12.0/24')
-interswitch_link_13 = netaddr.IPNetwork('155.1.13.0/24')
-interswitch_link_14 = netaddr.IPNetwork('155.1.14.0/24')
-interswitch_link_21 = netaddr.IPNetwork('155.1.21.0/24')
-interswitch_link_22 = netaddr.IPNetwork('155.1.22.0/24')
-interswitch_link_23 = netaddr.IPNetwork('155.1.23.0/24')
-interswitch_link_24 = netaddr.IPNetwork('155.1.24.0/24')
-oob_mgmt_1 = netaddr.IPNetwork('192.168.137.0/24')
+# create loopback prefixes
+x = 1
+while x < 7:
+    loopback = netaddr.IPNetwork(f"150.{x}.{x}.0/24")
+    create_ip_prefix(loopback, 'loopback', True)
+    x += 1
 
-# create ip prefixes
-create_ip_prefix(loopback_1_agg, 'loopback', True)
-create_ip_prefix(loopback_2_agg, 'loopback', True)
-create_ip_prefix(loopback_3_agg, 'loopback', True)
-create_ip_prefix(loopback_4_agg, 'loopback', True)
-create_ip_prefix(loopback_5_agg, 'loopback', True)
-create_ip_prefix(loopback_6_agg, 'loopback', True)
-create_ip_prefix(interswitch_link_11, 'interswitch_link', True)
-create_ip_prefix(interswitch_link_12, 'interswitch_link', True)
-create_ip_prefix(interswitch_link_13, 'interswitch_link', True)
-create_ip_prefix(interswitch_link_14, 'interswitch_link', True)
-create_ip_prefix(interswitch_link_21, 'interswitch_link', True)
-create_ip_prefix(interswitch_link_22, 'interswitch_link', True)
-create_ip_prefix(interswitch_link_23, 'interswitch_link', True)
-create_ip_prefix(interswitch_link_24, 'interswitch_link', True)
-create_ip_prefix(oob_mgmt_1, 'oob_mgmt', True)
+# create interswitch links for spine1
+x = 11
+while x < 15:
+    interswitch_link = netaddr.IPNetwork(f"155.1.{x}.0/24")
+    create_ip_prefix(interswitch_link, 'interswitch_link', False)
+    x += 1
+
+# create interswitch links for spine1
+x = 21
+while x < 25:
+    interswitch_link = netaddr.IPNetwork(f"155.1.{x}.0/24")
+    create_ip_prefix(interswitch_link, 'interswitch_link', False)
+    x += 1
+
+# create oob prefix
+oob_mgmt = netaddr.IPNetwork('192.168.137.0/24')
+create_ip_prefix(oob_mgmt, 'oob_mgmt', False)
+
+# add 'cisco' as a new manufacturer
+cisco = nb.dcim.manufacturers.get(name='cisco')
+if not cisco:
+    cisco = nb.dcim.manufacturers.create(
+        name = 'cisco',
+        slug = 'cisco')
+
+# add 'ios' as a new platform
+ios = nb.dcim.platforms.get(name='ios')
+if not ios:
+    ios = nb.dcim.platforms.create(
+        name = 'ios',
+        slug = 'ios')
+
+# create ios interface template
+ios_interfaces = ['GigabitEthernet/{1..5}']
+
+# create an empty set
+asserted_ios_interface_list = set()
+
+# build set of ios interfaces
+for port in ios_interfaces:
+    asserted_ios_interface_list.update(braceexpand(port))
+
+# convert set to dict and set port speed
+interface_data = {}
+for port in asserted_ios_interface_list:
+    data = {}
+    intf_type = '1000base-t'
+    mgmt_status = False
+    if port == 'GigabitEthernet0/1':
+        mgmt_status = True
+    data.setdefault(port, dict(device_type=ios.id, name=port,
+                               mgmt_only=mgmt_status, type=intf_type))
+
+# add interface template for ios to netbox:
+for intf, intf_data in interface_data.items():
+    try:
+        # check if interfaces already exist
+        ifGet = nb.dcim.interface_templates.get(devicetype_id=intf_data['device_type'], 
+                                                name=intf)
+        if ifGet:
+            continue
+        else:
+            # create interfaces if they don't exist
+            ifSuccess = nb.dcim.interface_templates.create(
+                device_type = intf_data['device_type'],
+                name = intf,
+                type = intf_data['type'],
+                mgmt_only = intf_data['mgmt_only'],
+                )
+    except pynetbox.RequestError as e:
+        print(e.error)    
