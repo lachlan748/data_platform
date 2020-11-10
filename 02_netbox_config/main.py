@@ -1,4 +1,4 @@
-import netaddr, pynetbox, re
+import netaddr, pynetbox, re, yaml
 from braceexpand import braceexpand
 from pprint import pprint
 
@@ -205,13 +205,17 @@ for intf, intf_data in interface_data.items():
         print(e.error)    
 
 # create node list:
-nodes = ['spine1', 'spine2', 'leaf1', 'leaf2', 'leaf3', 'leaf4', 'leaf5']
+#nodes = ['spine1', 'spine2', 'leaf1', 'leaf2', 'leaf3', 'leaf4', 'leaf5']
 
 # create an empty dict to store all device data
 master = {}
 
+# parse topology interface data from external file
+with open('./interfaces.yml', 'r') as f:
+    clos = yaml.safe_load(f)
+
 # build out master dict for each node
-for node in nodes:
+for node, node_data in clos.items():
     device_type = iosv.id
     device_role = leaf.id
     # set spine device_role
@@ -225,21 +229,23 @@ for node in nodes:
     x = node[-1]
     primary_ip4 = {'address': f'150.1.{x}.{x}/32'}
     interfaces = {}
-    for intf, intf_data in interface_data.items():
+    for intf, intf_data in node_data.items():
         # create empty dict per interface
         data = {}
         # set default parameters
         name = intf
         device = None
-        description = None
-        type = intf_data['type']
-        ip = None
+        description = intf_data['description']
+        type = 'foo'
+        ip = intf_data['ip']
         mode = None
         enabled = False
+        if intf:
+            enabled = True
         lag = None
         tagged_vlans = None
         untagged_vlan = None
-        data.setdefault(intf.title(), dict(description=description,
+        data.setdefault(intf, dict(description=description,
                                            lag=lag, mode=mode, 
                                            tagged_vlans=tagged_vlans,
                                            untagged_vlan=untagged_vlan,

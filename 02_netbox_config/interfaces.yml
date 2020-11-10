@@ -5,19 +5,19 @@ spine1:
     ip: '192.168.137.241/24'
   GigabitEthernet0/1:
     description: 'leaf1_gig0/1'
-    ip:
+    ip: '155.1.11.0/31'
   GigabitEthernet0/2:
     description: 'leaf2_gig0/1'
-    ip:
+    ip: '155.1.11.2/31'
   GigabitEthernet0/3:
     description: 'leaf3_gig0/1'
-    ip:
+    ip: '155.1.11.4/31'
   GigabitEthernet0/4:
     description: 'leaf4_gig0/1'
-    ip:
+    ip: '155.1.11.6/31'
   GigabitEthernet0/5:
     description: 'leaf5_gig0/1'
-    ip:
+    ip: '155.1.11.8/31'
 
 spine2:
   GigabitEthernet0/0:
@@ -25,19 +25,19 @@ spine2:
     ip: '192.168.137.242/24'
   GigabitEthernet0/1:
     description: 'leaf1_gig0/2'
-    ip:
+    ip: '155.1.11.10/31'
   GigabitEthernet0/2:
     description: 'leaf2_gig0/2'
-    ip:
+    ip: '155.1.11.12/31'
   GigabitEthernet0/3:
     description: 'leaf3_gig0/2'
-    ip:
+    ip: '155.1.11.14/31'
   GigabitEthernet0/4:
     description: 'leaf4_gig0/2'
-    ip:
+    ip: '155.1.11.16/31'
   GigabitEthernet0/5:
     description: 'leaf5_gig0/2'
-    ip:
+    ip: '155.1.11.18/31'
 
 leaf1:
   GigabitEthernet0/0:
@@ -45,10 +45,10 @@ leaf1:
     ip: '192.168.137.243/24'
   GigabitEthernet0/1:
     description: 'spine1_gig0/1'
-    ip:
+    ip: '155.1.11.1/31'
   GigabitEthernet0/2:
     description: 'spine2_gig0/1'
-    ip:
+    ip: '155.1.11.11/31'
 
 leaf2:
   GigabitEthernet0/0:
@@ -56,10 +56,10 @@ leaf2:
     ip: '192.168.137.244/24'
   GigabitEthernet0/1:
     description: 'spine1_gig0/2'
-    ip:
+    ip: '155.1.11.3/31'
   GigabitEthernet0/2:
     description: 'spine2_gig0/2'
-    ip:
+    ip: '155.1.11.13/31'
 
 leaf3:
   GigabitEthernet0/0:
@@ -67,10 +67,10 @@ leaf3:
     ip: '192.168.137.245/24'
   GigabitEthernet0/1:
     description: 'spine1_gig0/3'
-    ip:
+    ip: '155.1.11.5/31'
   GigabitEthernet0/2:
     description: 'spine2_gig0/3'
-    ip:
+    ip: '155.1.11.15/31'
 
 leaf4:
   GigabitEthernet0/0:
@@ -78,10 +78,10 @@ leaf4:
     ip: '192.168.137.246/24'
   GigabitEthernet0/1:
     description: 'spine1_gig0/4'
-    ip:
+    ip: '155.1.11.7/31'
   GigabitEthernet0/2:
     description: 'spine2_gig0/4'
-    ip:
+    ip: '155.1.11.17/31'
 
 leaf5:
   GigabitEthernet0/0:
@@ -89,7 +89,7 @@ leaf5:
     ip: '192.168.137.247/24'
   GigabitEthernet0/1:
     description: 'spine1_gig0/5'
-    ip:
+    ip: '155.1.11.9/31'
   GigabitEthernet0/2:
     description: 'spine2_gig0/5'
-    ip:
+    ip: '155.1.11.19/31'
