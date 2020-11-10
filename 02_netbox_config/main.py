@@ -1,4 +1,4 @@
-import netaddr, pynetbox, re, yaml
+import netaddr, pynetbox, re, sys, yaml
 from braceexpand import braceexpand
 from pprint import pprint
 
@@ -9,6 +9,7 @@ nb = pynetbox.api(
 )
 
 # get tenancy, create new if necessary
+print(f"\nChecking netbox tenants...")
 upstart_crow = nb.tenancy.tenants.get(name='upstart_crow')
 if not upstart_crow:
     upstart_crow = nb.tenancy.tenants.create(
@@ -17,6 +18,7 @@ if not upstart_crow:
 
 
 # get regions
+print(f"\nChecking netbox region...")
 all_regions = nb.dcim.regions.all()
 def create_region(region):
     slug = region.lower()
@@ -27,6 +29,7 @@ def create_region(region):
             )
 
 # get emea region
+print(f"\nAdding EMEA region...")
 create_region('EMEA')
 emea = nb.dcim.regions.get(name='EMEA')
 
@@ -39,35 +42,42 @@ if not ld4:
         slug = 'ld4')
 
 # get active device roles
+print(f"\nChecking device roles...")
 roles = nb.dcim.device_roles.all()
 
 # create roles
 spine = nb.dcim.device_roles.get(name='spine')
 leaf = nb.dcim.device_roles.get(name='leaf')
 if 'spine' not in [x.name for x in roles]:
+    print(f"\nCreating 'spine' device role...")
     spine = nb.dcim.device_roles.create(
         name = 'spine',
         slug = 'spine')
 if 'leaf' not in [x.name for x in roles]:
+    print(f"\nCreating 'leaf' device role...")
     leaf = nb.dcim.device_roles.create(
         name = 'leaf',
         slug = 'leaf')
 
 # get active RIR's
+print(f"\nChecking IPAM RIR's...")
 all_rirs = nb.ipam.rirs.all()
 
 # create rfc1918 RIR
 if 'rfc1918' not in [x.name for x in all_rirs]:
+    print(f"\nCreating RFC1918 RIR...")
     rfc1918 = nb.ipam.rirs.create(
         name = 'rfc1918',
         is_private = True,
         slug = 'rfc1918')
 
 # get active ipam roles
+print(f"\nChecking IPAM roles...")
 ipam_roles = nb.ipam.roles.all()
 
 # define function for ipam role creation
 def create_ipam_role(role_name):
+    print(f"\nCreating '{role_name}' IPAM role...")
     if role_name not in [x.name for x in ipam_roles]:
         role_name = nb.ipam.roles.create(
             name = role_name,
@@ -80,10 +90,12 @@ create_ipam_role('oob_mgmt')
 create_ipam_role('interswitch_link')
 
 # get active aggregates
+print(f"\nChecking IPAM aggregate data...")
 all_aggregates = nb.ipam.aggregates.all()
 
 def create_ip_aggregate(prefix):
     if str(prefix) not in [x.prefix for x in all_aggregates]:
+        print(f"\nCreating IPAM {prefix} aggregate...")
         role = nb.ipam.aggregates.create(
             prefix = str(prefix),
             site = ld4.id,
@@ -91,10 +103,12 @@ def create_ip_aggregate(prefix):
             tenant = upstart_crow.id)
 
 # get active prefixes
+print(f"\nChecking active IPAM prefixes...")
 all_prefixes = nb.ipam.prefixes.all()
 
 # define function for prefix creation
 def create_ip_prefix(prefix, role, pool):
+    print(f"\nCreating IPAM {prefix} prefix...")
     # get role.id
     role = nb.ipam.roles.get(name=role)
     if str(prefix) not in [x.prefix for x in all_prefixes]:
@@ -122,25 +136,19 @@ while x < 7:
     create_ip_prefix(loopback, 'loopback', True)
     x += 1
 
-# create interswitch links for spine1
-x = 11
-while x < 16:
-    interswitch_link = netaddr.IPNetwork(f"155.1.{x}.0/24")
+# create interswitch links
+x = 0
+while x < 20:
+    interswitch_link = netaddr.IPNetwork(f"155.1.11.{x}/31")
     create_ip_prefix(interswitch_link, 'interswitch_link', False)
-    x += 1
-
-# create interswitch links for spine2
-x = 21
-while x < 26:
-    interswitch_link = netaddr.IPNetwork(f"155.1.{x}.0/24")
-    create_ip_prefix(interswitch_link, 'interswitch_link', False)
-    x += 1
+    x += 2
 
 # create oob prefix
 oob_mgmt = netaddr.IPNetwork('192.168.137.0/24')
 create_ip_prefix(oob_mgmt, 'oob_mgmt', False)
 
 # add 'cisco' as a new manufacturer
+print(f"\nChecking DCIM vendor list...")
 cisco = nb.dcim.manufacturers.get(name='cisco')
 if not cisco:
     cisco = nb.dcim.manufacturers.create(
@@ -148,6 +156,7 @@ if not cisco:
         slug = 'cisco')
 
 # add 'ios' as a new platform
+print(f"\nChecking DCIM platform list...")
 ios = nb.dcim.platforms.get(name='ios')
 if not ios:
     ios = nb.dcim.platforms.create(
@@ -155,8 +164,10 @@ if not ios:
         slug = 'ios')
 
 # add the iosv device type
+print(f"\nChecking DCIM device types...")
 iosv = nb.dcim.device_types.get(model='iosv')
 if not iosv:
+    print(f"\nCreating IOSv device type...")
     iosv = nb.dcim.device_types.create(
         model = 'iosv',
         manufacturer = ios.id,
@@ -186,6 +197,7 @@ for port in asserted_ios_interface_list:
     interface_data.update(data)
 
 # add interface template for ios to netbox:
+print(f"\nChecking DCIM interface templates...")
 for intf, intf_data in interface_data.items():
     try:
         # check if interfaces already exist
@@ -195,6 +207,7 @@ for intf, intf_data in interface_data.items():
             continue
         else:
             # create interfaces if they don't exist
+            print(f"\nCreating DCIM interface templates...")
             ifSuccess = nb.dcim.interface_templates.create(
                 device_type = intf_data['device_type'],
                 name = intf,
@@ -211,10 +224,12 @@ for intf, intf_data in interface_data.items():
 master = {}
 
 # parse topology interface data from external file
+print(f"\nReading topology interface data...")
 with open('./interfaces.yml', 'r') as f:
     clos = yaml.safe_load(f)
 
 # build out master dict for each node
+print(f"\nBuilding python dict of node and interface data...")
 for node, node_data in clos.items():
     device_type = iosv.id
     device_role = leaf.id
@@ -236,12 +251,10 @@ for node, node_data in clos.items():
         name = intf
         device = None
         description = intf_data['description']
-        type = 'foo'
+        type = '1000base-t'
         ip = intf_data['ip']
         mode = None
-        enabled = False
-        if intf:
-            enabled = True
+        enabled = True
         lag = None
         tagged_vlans = None
         untagged_vlan = None
@@ -258,4 +271,46 @@ for node, node_data in clos.items():
                                  primary_ip4=primary_ip4,
                                  interfaces=interfaces))
 
-pprint(master)
+# get all active netbox nodes
+print(f"\nChecking DCIM nodes...")
+all_nodes = nb.dcim.devices.all()
+
+# push node data to netbox
+for node, node_data in master.items():
+
+    # create node if it doesn't exist
+    if node not in [x.name for x in all_nodes]:
+        print(f"\nCreating {node} in DCIM...")
+        node_new = nb.dcim.devices.create(
+            name = node,
+            site = node_data['site'],
+            device_type = node_data['device_type'],
+            platform = node_data['platform'],
+            tenant = node_data['tenant'],
+            device_role = node_data['device_role'])
+
+        for intf, intf_data in node_data['interfaces'].items():
+            # create Loopback0 interface and bind to node
+            if intf.lower().startswith('loop'):
+                print(f"Creating Loopback0 and binding to {node}...")
+                nbintf = nb.dcim.interfaces.create(
+                    name = intf,
+                    device = node_new.id,
+                    type = 'virtual',
+                    description = intf_data['description'],
+                    )
+
+                # add IP data to Loopback0 interface
+                x = node[-1]
+                intf_ip = nb.ipam.ip_addresses.create(
+                    address = intf_data['ip'],
+                    status = 'active',
+                    interface =  nbintf.id,
+                    tenant = upstart_crow.id,
+                    role = 'loopback'
+                    )
+
+                # now set Loopback0
+                print(f"Setting Loopback0 as primary_ip4 interface...")
+                node_new.primary_ip4 = {'address': intf_data['ip']}
+                node_new.save()
