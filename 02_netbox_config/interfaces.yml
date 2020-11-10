@@ -1,0 +1,95 @@
+---
+spine1:
+  GigabitEthernet0/0:
+    description: 'oob_mgmt_intf'
+    ip: '192.168.137.241/24'
+  GigabitEthernet0/1:
+    description: 'leaf1_gig0/1'
+    ip:
+  GigabitEthernet0/2:
+    description: 'leaf2_gig0/1'
+    ip:
+  GigabitEthernet0/3:
+    description: 'leaf3_gig0/1'
+    ip:
+  GigabitEthernet0/4:
+    description: 'leaf4_gig0/1'
+    ip:
+  GigabitEthernet0/5:
+    description: 'leaf5_gig0/1'
+    ip:
+
+spine2:
+  GigabitEthernet0/0:
+    description: 'oob_mgmt_intf'
+    ip: '192.168.137.242/24'
+  GigabitEthernet0/1:
+    description: 'leaf1_gig0/2'
+    ip:
+  GigabitEthernet0/2:
+    description: 'leaf2_gig0/2'
+    ip:
+  GigabitEthernet0/3:
+    description: 'leaf3_gig0/2'
+    ip:
+  GigabitEthernet0/4:
+    description: 'leaf4_gig0/2'
+    ip:
+  GigabitEthernet0/5:
+    description: 'leaf5_gig0/2'
+    ip:
+
+leaf1:
+  GigabitEthernet0/0:
+    description: 'oob_mgmt_intf'
+    ip: '192.168.137.243/24'
+  GigabitEthernet0/1:
+    description: 'spine1_gig0/1'
+    ip:
+  GigabitEthernet0/2:
+    description: 'spine2_gig0/1'
+    ip:
+
+leaf2:
+  GigabitEthernet0/0:
+    description: 'oob_mgmt_intf'
+    ip: '192.168.137.244/24'
+  GigabitEthernet0/1:
+    description: 'spine1_gig0/2'
+    ip:
+  GigabitEthernet0/2:
+    description: 'spine2_gig0/2'
+    ip:
+
+leaf3:
+  GigabitEthernet0/0:
+    description: 'oob_mgmt_intf'
+    ip: '192.168.137.245/24'
+  GigabitEthernet0/1:
+    description: 'spine1_gig0/3'
+    ip:
+  GigabitEthernet0/2:
+    description: 'spine2_gig0/3'
+    ip:
+
+leaf4:
+  GigabitEthernet0/0:
+    description: 'oob_mgmt_intf'
+    ip: '192.168.137.246/24'
+  GigabitEthernet0/1:
+    description: 'spine1_gig0/4'
+    ip:
+  GigabitEthernet0/2:
+    description: 'spine2_gig0/4'
+    ip:
+
+leaf5:
+  GigabitEthernet0/0:
+    description: 'oob_mgmt_intf'
+    ip: '192.168.137.247/24'
+  GigabitEthernet0/1:
+    description: 'spine1_gig0/5'
+    ip:
+  GigabitEthernet0/2:
+    description: 'spine2_gig0/5'
+    ip:
