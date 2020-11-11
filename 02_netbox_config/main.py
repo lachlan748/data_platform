@@ -132,7 +132,7 @@ create_ip_aggregate(oob_mgmt_agg)
 # create loopback prefixes
 x = 1
 while x < 7:
-    loopback = netaddr.IPNetwork(f"150.{x}.{x}.0/24")
+    loopback = netaddr.IPNetwork(f"150.1.{x}.0/24")
     create_ip_prefix(loopback, 'loopback', True)
     x += 1
 
@@ -275,6 +275,8 @@ for node, node_data in clos.items():
 print(f"\nChecking DCIM nodes...")
 all_nodes = nb.dcim.devices.all()
 
+#sys.exit(0u
+
 # push node data to netbox
 for node, node_data in master.items():
 
@@ -305,12 +307,17 @@ for node, node_data in master.items():
                 intf_ip = nb.ipam.ip_addresses.create(
                     address = intf_data['ip'],
                     status = 'active',
-                    interface =  nbintf.id,
+                    # note, the interface reference will not work in Netbox 2.9.x
+                    #interface =  nbintf.id,
                     tenant = upstart_crow.id,
-                    role = 'loopback'
+                    role = 'loopback',
+                    # specify 3x assigned object values instead of interface
+                    assigned_object = node_new.id,
+                    assigned_object_id = nbintf.id,
+                    assigned_object_type = 'dcim.interface'
                     )
 
-                # now set Loopback0
+                # now set Loopback0 as the primary mgmt interface
                 print(f"Setting Loopback0 as primary_ip4 interface...")
                 node_new.primary_ip4 = {'address': intf_data['ip']}
                 node_new.save()

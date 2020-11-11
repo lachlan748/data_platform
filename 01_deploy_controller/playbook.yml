@@ -120,15 +120,14 @@
     - name: pull netbox image from hub.docker.com
       community.general.docker_image:
         name: netboxcommunity/netbox:latest
-        #name: netboxcommunity/netbox:v2.8.5
         source: pull
 
-          # - name: add env variable ALLOWED_HOSTS to env/netbox.env
-          #   lineinfile:
-          #     path: projects/netbox/env/netbox.env
-          #     line: ALLOWED_HOSTS=['*']
-          #     insertbefore: BOF
-          #     state: present
+    # - name: add env variable ALLOWED_HOSTS to env/netbox.env
+    #   lineinfile:
+    #     path: projects/netbox/env/netbox.env
+    #     line: ALLOWED_HOSTS=['*']
+    #     insertbefore: BOF
+    #     state: present
 
     - name: start netbox container
       community.general.docker_compose:
