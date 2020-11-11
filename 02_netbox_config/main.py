@@ -218,7 +218,7 @@ for intf, intf_data in interface_data.items():
         print(e.error)    
 
 # create node list:
-#nodes = ['spine1', 'spine2', 'leaf1', 'leaf2', 'leaf3', 'leaf4', 'leaf5']
+nodes = ['spine1', 'spine2', 'leaf1', 'leaf2', 'leaf3', 'leaf4', 'leaf5']
 
 # create an empty dict to store all device data
 master = {}
@@ -275,8 +275,6 @@ for node, node_data in clos.items():
 print(f"\nChecking DCIM nodes...")
 all_nodes = nb.dcim.devices.all()
 
-#sys.exit(0u
-
 # push node data to netbox
 for node, node_data in master.items():
 
@@ -294,7 +292,7 @@ for node, node_data in master.items():
         for intf, intf_data in node_data['interfaces'].items():
             # create Loopback0 interface and bind to node
             if intf.lower().startswith('loop'):
-                print(f"Creating Loopback0 and binding to {node}...")
+                print(f"\nCreating Loopback0 and binding to {node}...")
                 nbintf = nb.dcim.interfaces.create(
                     name = intf,
                     device = node_new.id,
@@ -318,6 +316,65 @@ for node, node_data in master.items():
                     )
 
                 # now set Loopback0 as the primary mgmt interface
-                print(f"Setting Loopback0 as primary_ip4 interface...")
+                print(f"\nSetting Loopback0 as primary_ip4 interface...")
                 node_new.primary_ip4 = {'address': intf_data['ip']}
                 node_new.save()
+
+            # update iosv device template interfaces
+            elif intf.lower().startswith('gigabit'):
+                print(f"\nUpdating {intf} details...")
+                nbintf = nb.dcim.interfaces.get(name=intf, device=node)
+                nbintf.description = intf_data['description']
+                nbintf.enabled = intf_data['enabled']
+                nbintf.save()
+
+                # now add IP data per interface
+                print(f"\nBinding {intf_data['ip']} to {intf}...")
+                intf_ip = nb.ipam.ip_addresses.create(
+                    address = intf_data['ip'],
+                    status = 'active',
+                    # note, the interface reference will not work in Netbox 2.9.x
+                    interface = nbintf.id,
+                    tenant = upstart_crow.id,
+                    assigned_object = node_new.id,
+                    assigned_object_id = nbintf.id,
+                    assigned_object_type = 'dcim.interface'
+                    )
+
+# define patch function
+def patch_cables(node_a, node_b, link_a, link_b):
+    link_a = nb.dcim.interfaces.get(device=node_a, name=link_a)
+    link_b = nb.dcim.interfaces.get(device=node_b, name=link_b)
+    # check if link_a/b is connected already
+    if link_a.connection_status == None and link_b.connection_status == None:
+        new_cable = nb.dcim.cables.create(
+            termination_a_type = "dcim.interface",
+            termination_a_id = link_a.id,
+            termination_b_type = "dcim.interface",
+            termination_b_id = link_b.id
+            )
+
+# connect topology
+def get_node(node_name):
+    """ grab node object from nb, based on name """
+
+    node_object = nb.dcim.devices.get(name=node_name)
+    return node_object
+
+spine1 = get_node('spine1')
+spine2 = get_node('spine2')
+leaf1 = get_node('leaf1')
+leaf2 = get_node('leaf2')
+leaf3 = get_node('leaf3')
+leaf4 = get_node('leaf4')
+leaf5 = get_node('leaf5')
+
+# patch cables
+leafs = [leaf1, leaf2, leaf3, leaf4, leaf5]
+x = 1
+while x < 6:
+    for leaf in leafs:
+        print(f"\nConnecting {leaf} to spines...")
+        patch_cables(spine1, leaf, f"GigabitEthernet0/{x}", f"GigabitEthernet0/1")
+        patch_cables(spine2, leaf, f"GigabitEthernet0/{x}", f"GigabitEthernet0/2")
+        x += 1
