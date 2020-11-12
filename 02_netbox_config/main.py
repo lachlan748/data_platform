@@ -2,11 +2,11 @@ import netaddr, pynetbox, re, sys, yaml
 from braceexpand import braceexpand
 from pprint import pprint
 
+
 # set netbox-docker api address and token
 nb = pynetbox.api(
     'http://192.168.137.100:8000',
-    token='0123456789abcdef0123456789abcdef01234567'
-)
+    token='0123456789abcdef0123456789abcdef01234567')
 
 # get tenancy, create new if necessary
 print(f"\nChecking netbox tenants...")
@@ -18,28 +18,38 @@ if not upstart_crow:
 
 
 # get regions
-print(f"\nChecking netbox region...")
+print(f"\nChecking netbox regions...")
 all_regions = nb.dcim.regions.all()
+
 def create_region(region):
     slug = region.lower()
+    print(f"\nAdding {region} region...")
     if region not in [x.name for x in all_regions]:
         region = nb.dcim.regions.create(
             name = region,
             slug = slug
             )
 
-# get emea region
-print(f"\nAdding EMEA region...")
+# create EMEA region and pull object
 create_region('EMEA')
 emea = nb.dcim.regions.get(name='EMEA')
 
-# check if site LD4 exists
+# get sites
+all_sites = nb.dcim.sites.all()
+
+def create_site(site, region):
+    slug = site.lower()
+    print(f"\nAdding {site} site to region {region}...")
+    if site not in [x.name for x in all_sites]:
+        site = nb.dcim.sites.create(
+            name = site,
+            region = region.id,
+            slug = slug
+            )
+
+# create LD4 site and pull object
+create_site('LD4', emea)
 ld4 = nb.dcim.sites.get(name='LD4')
-if not ld4:
-    ld4 = nb.dcim.sites.create(
-        name = 'LD4',
-        region = emea.id,
-        slug = 'ld4')
 
 # get active device roles
 print(f"\nChecking device roles...")
