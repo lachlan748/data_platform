@@ -122,13 +122,6 @@
         name: netboxcommunity/netbox:latest
         source: pull
 
-    # - name: add env variable ALLOWED_HOSTS to env/netbox.env
-    #   lineinfile:
-    #     path: projects/netbox/env/netbox.env
-    #     line: ALLOWED_HOSTS=['*']
-    #     insertbefore: BOF
-    #     state: present
-
     - name: start netbox container
       community.general.docker_compose:
         project_src: ./projects/netbox
