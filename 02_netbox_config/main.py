@@ -146,6 +146,27 @@ loopback_agg = netaddr.IPNetwork('150.0.0.0/8')
 interswitch_link_agg = netaddr.IPNetwork('155.0.0.0/8')
 oob_mgmt_agg = netaddr.IPNetwork('192.168.0.0/16')
 
+# get active vrfs
+print(f"\nChecking IPAM VRF's...")
+all_vrfs = nb.ipam.vrfs.all()
+
+
+def create_vrf(name, rd, tenant):
+    if name not in [x.name for x in all_vrfs]:
+        print(f"\nCreating IPAM {name} VRF...")
+        vrf = nb.ipam.vrfs.create(
+            name=name,
+            rd=rd,
+            tenant=tenant.id
+            )
+
+        return vrf
+
+
+# create vrf
+create_vrf('mgmt', '1:1', upstart_crow)
+mgmt_vrf = nb.ipam.vrfs.get(name='mgmt')
+
 # create ip aggregates
 aggregates = [loopback_agg, interswitch_link_agg, oob_mgmt_agg]
 for agg in aggregates:
@@ -168,6 +189,8 @@ def create_ip_prefix(prefix, role, site, tenant, pool):
             is_pool=pool
             )
 
+        return prefix
+
 
 # create loopback prefixes
 x = 1
@@ -187,6 +210,11 @@ while x < 20:
 # create oob prefix
 oob_mgmt = netaddr.IPNetwork('192.168.137.0/24')
 create_ip_prefix(oob_mgmt, 'oob_mgmt', ld4, upstart_crow, False)
+oob_mgmt = nb.ipam.prefixes.get(prefix='192.168.137.0/24')
+
+# assign vrf to oob_mgmt
+oob_mgmt.vrf = mgmt_vrf.id
+oob_mgmt.save()
 
 # get manufacturers/vendors
 print(f"\nChecking DCIM manufacturers...")
@@ -409,12 +437,18 @@ for node, node_data in master.items():
                     address=intf_data['ip'],
                     status='active',
                     # note, the interface ref will not work in Netbox 2.9.x
-                    interface=nbintf.id,
+                    # interface=nbintf.id,
                     tenant=upstart_crow.id,
                     assigned_object=node_new.id,
                     assigned_object_id=nbintf.id,
                     assigned_object_type='dcim.interface'
                     )
+
+                # update vrf for GigabitEthernet0/0
+                if intf.lower() == 'gigabitethernet0/0':
+                    print(f"\nUpdating {intf} with VRF data...")
+                    intf_ip.vrf = mgmt_vrf.id
+                    intf_ip.save()
 
 
 # define patch function
