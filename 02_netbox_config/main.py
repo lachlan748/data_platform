@@ -160,7 +160,7 @@ def create_ip_prefix(prefix, role, site, tenant, pool):
     role = nb.ipam.roles.get(name=role)
     if str(prefix) not in [x.prefix for x in all_prefixes]:
         print(f"\nCreating IPAM {prefix} prefix...")
-        role = nb.ipam.prefixes.create(
+        prefix = nb.ipam.prefixes.create(
             prefix=str(prefix),
             role=role.id,
             site=ld4.id,
