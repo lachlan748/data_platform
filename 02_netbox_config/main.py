@@ -136,14 +136,11 @@ aggregates = [loopback_agg, interswitch_link_agg, oob_mgmt_agg]
 for agg in aggregates:
     create_ip_aggregate(agg, rfc1918, upstart_crow)
 
-sys.exit(0)
-
 # get active prefixes
 print(f"\nChecking active IPAM prefixes...")
 all_prefixes = nb.ipam.prefixes.all()
 
-def create_ip_prefix(prefix, role, pool):
-    # get role.id
+def create_ip_prefix(prefix, role, site, tenant, pool):
     role = nb.ipam.roles.get(name=role)
     if str(prefix) not in [x.prefix for x in all_prefixes]:
         print(f"\nCreating IPAM {prefix} prefix...")
@@ -159,19 +156,20 @@ def create_ip_prefix(prefix, role, pool):
 x = 1
 while x < 7:
     loopback = netaddr.IPNetwork(f"150.1.{x}.0/24")
-    create_ip_prefix(loopback, 'loopback', True)
+    create_ip_prefix(loopback, 'loopback', ld4, upstart_crow, True)
     x += 1
 
 # create interswitch links
 x = 0
 while x < 20:
     interswitch_link = netaddr.IPNetwork(f"155.1.11.{x}/31")
-    create_ip_prefix(interswitch_link, 'interswitch_link', False)
+    create_ip_prefix(interswitch_link, 'interswitch_link', ld4,
+                     upstart_crow, False)
     x += 2
 
 # create oob prefix
 oob_mgmt = netaddr.IPNetwork('192.168.137.0/24')
-create_ip_prefix(oob_mgmt, 'oob_mgmt', False)
+create_ip_prefix(oob_mgmt, 'oob_mgmt', ld4, upstart_crow, False)
 
 # get manufacturers/vendors
 print(f"\nChecking DCIM manufacturers...")
@@ -201,6 +199,7 @@ def create_platform(name, vendor):
         platform = nb.dcim.platforms.create(
             name = name,
             manufacturer = vendor.id,
+            napalm_driver = name,
             slug = slug
             )
 

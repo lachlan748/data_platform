@@ -5,3 +5,4 @@ virl2-client==2.1.0
 braceexpand==0.1.6
 pynetbox==5.1.0
 netaddr==0.8.0
+napalm==3.2.0
