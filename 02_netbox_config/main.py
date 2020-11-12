@@ -23,8 +23,8 @@ all_regions = nb.dcim.regions.all()
 
 def create_region(region):
     slug = region.lower()
-    print(f"\nAdding {region} region...")
     if region not in [x.name for x in all_regions]:
+        print(f"\nAdding {region} region...")
         region = nb.dcim.regions.create(
             name = region,
             slug = slug
@@ -39,8 +39,8 @@ all_sites = nb.dcim.sites.all()
 
 def create_site(site, region):
     slug = site.lower()
-    print(f"\nAdding {site} site to region {region}...")
     if site not in [x.name for x in all_sites]:
+        print(f"\nAdding {site} site to region {region}...")
         site = nb.dcim.sites.create(
             name = site,
             region = region.id,
@@ -53,21 +53,22 @@ ld4 = nb.dcim.sites.get(name='LD4')
 
 # get active device roles
 print(f"\nChecking device roles...")
-roles = nb.dcim.device_roles.all()
+all_roles = nb.dcim.device_roles.all()
+
+def create_device_role(role):
+    slug = role.lower()
+    if role not in [x.name for x in all_roles]:
+        print(f"\nAdding {role} to device roles...")
+        role = nb.dcim.device_roles.create(
+            name = role,
+            slug = slug
+            )
 
 # create roles
+create_device_role('spine')
+create_device_role('leaf')
 spine = nb.dcim.device_roles.get(name='spine')
 leaf = nb.dcim.device_roles.get(name='leaf')
-if 'spine' not in [x.name for x in roles]:
-    print(f"\nCreating 'spine' device role...")
-    spine = nb.dcim.device_roles.create(
-        name = 'spine',
-        slug = 'spine')
-if 'leaf' not in [x.name for x in roles]:
-    print(f"\nCreating 'leaf' device role...")
-    leaf = nb.dcim.device_roles.create(
-        name = 'leaf',
-        slug = 'leaf')
 
 # get active RIR's
 print(f"\nChecking IPAM RIR's...")
