@@ -1,6 +1,7 @@
-import netaddr, pynetbox, re, sys, yaml
+import netaddr
+import pynetbox
+import yaml
 from braceexpand import braceexpand
-from pprint import pprint
 
 
 # set netbox-docker api address and token
@@ -12,14 +13,16 @@ nb = pynetbox.api(
 print(f"\nChecking netbox tenants...")
 all_tenants = nb.tenancy.tenants.all()
 
+
 def create_tenant(name):
     slug = name.lower()
     if name not in [x.name for x in all_tenants]:
         print(f"\nAdding {name} tenant...")
         tenant = nb.tenancy.tenants.create(
-            name = name,
-            slug = slug
+            name=name,
+            slug=slug
             )
+
 
 # create upstart_crow tenant
 create_tenant('upstart_crow')
@@ -29,14 +32,16 @@ upstart_crow = nb.tenancy.tenants.get(name='upstart_crow')
 print(f"\nChecking netbox regions...")
 all_regions = nb.dcim.regions.all()
 
+
 def create_region(region):
     slug = region.lower()
     if region not in [x.name for x in all_regions]:
         print(f"\nAdding {region} region...")
         region = nb.dcim.regions.create(
-            name = region,
-            slug = slug
+            name=region,
+            slug=slug
             )
+
 
 # create EMEA region and pull object
 create_region('EMEA')
@@ -46,15 +51,17 @@ emea = nb.dcim.regions.get(name='EMEA')
 print(f"\nChecking netbox sites...")
 all_sites = nb.dcim.sites.all()
 
+
 def create_site(site, region):
     slug = site.lower()
     if site not in [x.name for x in all_sites]:
         print(f"\nAdding {site} site to region {region}...")
         site = nb.dcim.sites.create(
-            name = site,
-            region = region.id,
-            slug = slug
+            name=site,
+            region=region.id,
+            slug=slug
             )
+
 
 # create LD4 site and pull object
 create_site('LD4', emea)
@@ -64,14 +71,16 @@ ld4 = nb.dcim.sites.get(name='LD4')
 print(f"\nChecking device roles...")
 all_roles = nb.dcim.device_roles.all()
 
+
 def create_device_role(role):
     slug = role.lower()
     if role not in [x.name for x in all_roles]:
         print(f"\nAdding {role} to device roles...")
         role = nb.dcim.device_roles.create(
-            name = role,
-            slug = slug
+            name=role,
+            slug=slug
             )
+
 
 # create roles
 create_device_role('spine')
@@ -83,15 +92,17 @@ leaf = nb.dcim.device_roles.get(name='leaf')
 print(f"\nChecking IPAM RIR's...")
 all_rirs = nb.ipam.rirs.all()
 
+
 def create_rir(rir, is_private):
     slug = rir.lower()
     if rir not in [x.name for x in all_rirs]:
         print(f"\nCreating {rir} RIR...")
         rir = nb.ipam.rirs.create(
-            name = rir,
-            is_private = is_private,
-            slug = slug
+            name=rir,
+            is_private=is_private,
+            slug=slug
             )
+
 
 # create rfc1918 RIR
 create_rir('rfc1918', True)
@@ -101,13 +112,15 @@ rfc1918 = nb.ipam.rirs.get(name='rfc1918')
 print(f"\nChecking IPAM roles...")
 ipam_roles = nb.ipam.roles.all()
 
+
 def create_ipam_role(role_name):
     print(f"\nCreating {role_name} IPAM role...")
     if role_name not in [x.name for x in ipam_roles]:
         role_name = nb.ipam.roles.create(
-            name = role_name,
-            slug = role_name,
-            description = role_name)
+            name=role_name,
+            slug=role_name,
+            description=role_name)
+
 
 # create ipam roles for subnet
 create_ipam_role('loopback')
@@ -118,13 +131,15 @@ create_ipam_role('interswitch_link')
 print(f"\nChecking IPAM aggregate data...")
 all_aggregates = nb.ipam.aggregates.all()
 
+
 def create_ip_aggregate(prefix, rir, tenant):
     if str(prefix) not in [x.prefix for x in all_aggregates]:
         print(f"\nCreating IPAM {prefix} aggregate...")
         aggregate = nb.ipam.aggregates.create(
-            prefix = str(prefix),
-            rir = rfc1918.id,
-            tenant = upstart_crow.id)
+            prefix=str(prefix),
+            rir=rfc1918.id,
+            tenant=upstart_crow.id)
+
 
 # define aggregate networks
 loopback_agg = netaddr.IPNetwork('150.0.0.0/8')
@@ -140,17 +155,19 @@ for agg in aggregates:
 print(f"\nChecking active IPAM prefixes...")
 all_prefixes = nb.ipam.prefixes.all()
 
+
 def create_ip_prefix(prefix, role, site, tenant, pool):
     role = nb.ipam.roles.get(name=role)
     if str(prefix) not in [x.prefix for x in all_prefixes]:
         print(f"\nCreating IPAM {prefix} prefix...")
         role = nb.ipam.prefixes.create(
-            prefix = str(prefix),
-            role = role.id,
-            site = ld4.id,
-            tenant = upstart_crow.id,
-            is_pool = pool
+            prefix=str(prefix),
+            role=role.id,
+            site=ld4.id,
+            tenant=upstart_crow.id,
+            is_pool=pool
             )
+
 
 # create loopback prefixes
 x = 1
@@ -175,14 +192,16 @@ create_ip_prefix(oob_mgmt, 'oob_mgmt', ld4, upstart_crow, False)
 print(f"\nChecking DCIM manufacturers...")
 all_manufacturers = nb.dcim.manufacturers.all()
 
+
 def create_manufacturer(name):
     slug = name.lower()
     if name not in [x.name for x in all_manufacturers]:
         print(f"\nAdding {name} to DCIM manufacturers...")
         manufacturer = nb.dcim.manufacturers.create(
-            name = name,
-            slug = slug
+            name=name,
+            slug=slug
             )
+
 
 # add 'cisco' as a new manufacturer
 create_manufacturer('cisco')
@@ -192,16 +211,18 @@ cisco = nb.dcim.manufacturers.get(name='cisco')
 print(f"\nChecking DCIM platforms...")
 all_platforms = nb.dcim.platforms.all()
 
+
 def create_platform(name, vendor):
     slug = name.lower()
     if name not in [x.name for x in all_platforms]:
         print(f"\nCreating {name} DCIM platform...")
         platform = nb.dcim.platforms.create(
-            name = name,
-            manufacturer = vendor.id,
-            napalm_driver = name,
-            slug = slug
+            name=name,
+            manufacturer=vendor.id,
+            napalm_driver=name,
+            slug=slug
             )
+
 
 # add 'ios' as a new platform
 create_platform('ios', cisco)
@@ -210,15 +231,17 @@ ios = nb.dcim.platforms.get(name='ios')
 # get device_types
 all_device_types = nb.dcim.device_types.all()
 
+
 def create_device_type(name, vendor):
     slug = name.lower()
     if name not in [x.model for x in all_device_types]:
-        print(f"\nCreating {name} device_type...")
+        print(f"\nCreating {name} DCIM device_type...")
         device_type = nb.dcim.device_types.create(
-            model = name,
-            manufacturer = vendor.id,
-            slug = slug
+            model=name,
+            manufacturer=vendor.id,
+            slug=slug
             )
+
 
 # add 'iosv' as a device_type
 create_device_type('iosv', cisco)
@@ -252,21 +275,22 @@ print(f"\nChecking DCIM interface templates...")
 for intf, intf_data in interface_data.items():
     try:
         # check if interfaces already exist
-        ifGet = nb.dcim.interface_templates.get(devicetype_id=intf_data['device_type'], 
-                                                name=intf)
+        ifGet = nb.dcim.interface_templates.get(
+            devicetype_id=intf_data['device_type'],
+            name=intf)
         if ifGet:
             continue
         else:
             # create interfaces if they don't exist
             print(f"\nCreating DCIM interface templates...")
             ifSuccess = nb.dcim.interface_templates.create(
-                device_type = intf_data['device_type'],
-                name = intf,
-                type = intf_data['type'],
-                mgmt_only = intf_data['mgmt_only'],
+                device_type=intf_data['device_type'],
+                name=intf,
+                type=intf_data['type'],
+                mgmt_only=intf_data['mgmt_only'],
                 )
     except pynetbox.RequestError as e:
-        print(e.error)    
+        print(e.error)
 
 # create node list:
 nodes = ['spine1', 'spine2', 'leaf1', 'leaf2', 'leaf3', 'leaf4', 'leaf5']
@@ -310,11 +334,11 @@ for node, node_data in clos.items():
         tagged_vlans = None
         untagged_vlan = None
         data.setdefault(intf, dict(description=description,
-                                           lag=lag, mode=mode, 
-                                           tagged_vlans=tagged_vlans,
-                                           untagged_vlan=untagged_vlan,
-                                           type='virtual', ip=ip,
-                                           enabled=enabled))
+                                   lag=lag, mode=mode,
+                                   tagged_vlans=tagged_vlans,
+                                   untagged_vlan=untagged_vlan,
+                                   type='virtual', ip=ip,
+                                   enabled=enabled))
         interfaces.update(data)
     master.setdefault(node, dict(name=node, device_type=device_type,
                                  device_role=device_role, tenant=tenant,
@@ -333,37 +357,37 @@ for node, node_data in master.items():
     if node not in [x.name for x in all_nodes]:
         print(f"\nCreating {node} in DCIM...")
         node_new = nb.dcim.devices.create(
-            name = node,
-            site = node_data['site'],
-            device_type = node_data['device_type'],
-            platform = node_data['platform'],
-            tenant = node_data['tenant'],
-            device_role = node_data['device_role'])
+            name=node,
+            site=node_data['site'],
+            device_type=node_data['device_type'],
+            platform=node_data['platform'],
+            tenant=node_data['tenant'],
+            device_role=node_data['device_role'])
 
         for intf, intf_data in node_data['interfaces'].items():
             # create Loopback0 interface and bind to node
             if intf.lower().startswith('loop'):
                 print(f"\nCreating Loopback0 and binding to {node}...")
                 nbintf = nb.dcim.interfaces.create(
-                    name = intf,
-                    device = node_new.id,
-                    type = 'virtual',
-                    description = intf_data['description'],
+                    name=intf,
+                    device=node_new.id,
+                    type='virtual',
+                    description=intf_data['description'],
                     )
 
                 # add IP data to Loopback0 interface
                 x = node[-1]
                 intf_ip = nb.ipam.ip_addresses.create(
-                    address = intf_data['ip'],
-                    status = 'active',
-                    # note, the interface reference will not work in Netbox 2.9.x
-                    #interface =  nbintf.id,
-                    tenant = upstart_crow.id,
-                    role = 'loopback',
+                    address=intf_data['ip'],
+                    status='active',
+                    # note, the interface ref will not work in Netbox 2.9.x
+                    # interface=nbintf.id,
+                    tenant=upstart_crow.id,
+                    role='loopback',
                     # specify 3x assigned object values instead of interface
-                    assigned_object = node_new.id,
-                    assigned_object_id = nbintf.id,
-                    assigned_object_type = 'dcim.interface'
+                    assigned_object=node_new.id,
+                    assigned_object_id=nbintf.id,
+                    assigned_object_type='dcim.interface'
                     )
 
                 # now set Loopback0 as the primary mgmt interface
@@ -382,15 +406,16 @@ for node, node_data in master.items():
                 # now add IP data per interface
                 print(f"\nBinding {intf_data['ip']} to {intf}...")
                 intf_ip = nb.ipam.ip_addresses.create(
-                    address = intf_data['ip'],
-                    status = 'active',
-                    # note, the interface reference will not work in Netbox 2.9.x
-                    interface = nbintf.id,
-                    tenant = upstart_crow.id,
-                    assigned_object = node_new.id,
-                    assigned_object_id = nbintf.id,
-                    assigned_object_type = 'dcim.interface'
+                    address=intf_data['ip'],
+                    status='active',
+                    # note, the interface ref will not work in Netbox 2.9.x
+                    interface=nbintf.id,
+                    tenant=upstart_crow.id,
+                    assigned_object=node_new.id,
+                    assigned_object_id=nbintf.id,
+                    assigned_object_type='dcim.interface'
                     )
+
 
 # define patch function
 def patch_cables(node_a, node_b, link_a, link_b):
@@ -399,11 +424,12 @@ def patch_cables(node_a, node_b, link_a, link_b):
     # check if link_a/b is connected already
     if link_a.connection_status == None and link_b.connection_status == None:
         new_cable = nb.dcim.cables.create(
-            termination_a_type = "dcim.interface",
-            termination_a_id = link_a.id,
-            termination_b_type = "dcim.interface",
-            termination_b_id = link_b.id
+            termination_a_type="dcim.interface",
+            termination_a_id=link_a.id,
+            termination_b_type="dcim.interface",
+            termination_b_id=link_b.id
             )
+
 
 # connect topology
 def get_node(node_name):
@@ -411,6 +437,7 @@ def get_node(node_name):
 
     node_object = nb.dcim.devices.get(name=node_name)
     return node_object
+
 
 spine1 = get_node('spine1')
 spine2 = get_node('spine2')
@@ -426,6 +453,8 @@ x = 1
 while x < 6:
     for leaf in leafs:
         print(f"\nConnecting {leaf} to spines...")
-        patch_cables(spine1, leaf, f"GigabitEthernet0/{x}", f"GigabitEthernet0/1")
-        patch_cables(spine2, leaf, f"GigabitEthernet0/{x}", f"GigabitEthernet0/2")
+        patch_cables(spine1, leaf, f"GigabitEthernet0/{x}",
+                     f"GigabitEthernet0/1")
+        patch_cables(spine2, leaf, f"GigabitEthernet0/{x}",
+                     f"GigabitEthernet0/2")
         x += 1
