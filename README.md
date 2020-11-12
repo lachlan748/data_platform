@@ -66,7 +66,8 @@ This build assumes:
 1. Setup your controller node by installing Centos 7. This node will host
    netbox, ELK and Ansible Tower (AWX).
 
-2. Once the OS is installed, copy your desktop SSH private key onto the controller:
+2. Once the OS is installed, copy your desktop SSH private key onto the
+   controller:
    ```ssh-copy-id {{ username }}@{{ controller_ip }}```
 
 3. Within this repo, move to the 01_deploy_controller directory:
