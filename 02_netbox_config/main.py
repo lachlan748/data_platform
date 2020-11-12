@@ -10,12 +10,20 @@ nb = pynetbox.api(
 
 # get tenancy, create new if necessary
 print(f"\nChecking netbox tenants...")
-upstart_crow = nb.tenancy.tenants.get(name='upstart_crow')
-if not upstart_crow:
-    upstart_crow = nb.tenancy.tenants.create(
-        name = 'upstart_crow',
-        slug = 'upstart_crow')
+all_tenants = nb.tenancy.tenants.all()
 
+def create_tenant(name):
+    slug = name.lower()
+    if name not in [x.name for x in all_tenants]:
+        print(f"\nAdding {name} tenant...")
+        tenant = nb.tenancy.tenants.create(
+            name = name,
+            slug = slug
+            )
+
+# create upstart_crow tenant
+create_tenant('upstart_crow')
+upstart_crow = nb.tenancy.tenants.get(name='upstart_crow')
 
 # get regions
 print(f"\nChecking netbox regions...")
@@ -87,6 +95,7 @@ def create_rir(rir, is_private):
 
 # create rfc1918 RIR
 create_rir('rfc1918', True)
+rfc1918 = nb.ipam.rirs.get(name='rfc1918')
 
 # get active ipam roles
 print(f"\nChecking IPAM roles...")
@@ -109,12 +118,11 @@ create_ipam_role('interswitch_link')
 print(f"\nChecking IPAM aggregate data...")
 all_aggregates = nb.ipam.aggregates.all()
 
-def create_ip_aggregate(prefix):
+def create_ip_aggregate(prefix, rir, tenant):
     if str(prefix) not in [x.prefix for x in all_aggregates]:
         print(f"\nCreating IPAM {prefix} aggregate...")
-        role = nb.ipam.aggregates.create(
+        aggregate = nb.ipam.aggregates.create(
             prefix = str(prefix),
-            site = ld4.id,
             rir = rfc1918.id,
             tenant = upstart_crow.id)
 
@@ -124,20 +132,21 @@ interswitch_link_agg = netaddr.IPNetwork('155.0.0.0/8')
 oob_mgmt_agg = netaddr.IPNetwork('192.168.0.0/16')
 
 # create ip aggregates
-create_ip_aggregate(loopback_agg)
-create_ip_aggregate(interswitch_link_agg)
-create_ip_aggregate(oob_mgmt_agg)
+aggregates = [loopback_agg, interswitch_link_agg, oob_mgmt_agg]
+for agg in aggregates:
+    create_ip_aggregate(agg, rfc1918, upstart_crow)
+
+sys.exit(0)
 
 # get active prefixes
 print(f"\nChecking active IPAM prefixes...")
 all_prefixes = nb.ipam.prefixes.all()
 
-# define function for prefix creation
 def create_ip_prefix(prefix, role, pool):
-    print(f"\nCreating IPAM {prefix} prefix...")
     # get role.id
     role = nb.ipam.roles.get(name=role)
     if str(prefix) not in [x.prefix for x in all_prefixes]:
+        print(f"\nCreating IPAM {prefix} prefix...")
         role = nb.ipam.prefixes.create(
             prefix = str(prefix),
             role = role.id,
@@ -191,7 +200,7 @@ def create_platform(name, vendor):
         print(f"\nCreating {name} DCIM platform...")
         platform = nb.dcim.platforms.create(
             name = name,
-            manufactuer = vendor.id,
+            manufacturer = vendor.id,
             slug = slug
             )
 
