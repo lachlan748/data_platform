@@ -35,6 +35,7 @@ create_region('EMEA')
 emea = nb.dcim.regions.get(name='EMEA')
 
 # get sites
+print(f"\nChecking netbox sites...")
 all_sites = nb.dcim.sites.all()
 
 def create_site(site, region):
@@ -74,21 +75,25 @@ leaf = nb.dcim.device_roles.get(name='leaf')
 print(f"\nChecking IPAM RIR's...")
 all_rirs = nb.ipam.rirs.all()
 
+def create_rir(rir, is_private):
+    slug = rir.lower()
+    if rir not in [x.name for x in all_rirs]:
+        print(f"\nCreating {rir} RIR...")
+        rir = nb.ipam.rirs.create(
+            name = rir,
+            is_private = is_private,
+            slug = slug
+            )
+
 # create rfc1918 RIR
-if 'rfc1918' not in [x.name for x in all_rirs]:
-    print(f"\nCreating RFC1918 RIR...")
-    rfc1918 = nb.ipam.rirs.create(
-        name = 'rfc1918',
-        is_private = True,
-        slug = 'rfc1918')
+create_rir('rfc1918', True)
 
 # get active ipam roles
 print(f"\nChecking IPAM roles...")
 ipam_roles = nb.ipam.roles.all()
 
-# define function for ipam role creation
 def create_ipam_role(role_name):
-    print(f"\nCreating '{role_name}' IPAM role...")
+    print(f"\nCreating {role_name} IPAM role...")
     if role_name not in [x.name for x in ipam_roles]:
         role_name = nb.ipam.roles.create(
             name = role_name,
@@ -113,6 +118,16 @@ def create_ip_aggregate(prefix):
             rir = rfc1918.id,
             tenant = upstart_crow.id)
 
+# define aggregate networks
+loopback_agg = netaddr.IPNetwork('150.0.0.0/8')
+interswitch_link_agg = netaddr.IPNetwork('155.0.0.0/8')
+oob_mgmt_agg = netaddr.IPNetwork('192.168.0.0/16')
+
+# create ip aggregates
+create_ip_aggregate(loopback_agg)
+create_ip_aggregate(interswitch_link_agg)
+create_ip_aggregate(oob_mgmt_agg)
+
 # get active prefixes
 print(f"\nChecking active IPAM prefixes...")
 all_prefixes = nb.ipam.prefixes.all()
@@ -128,17 +143,8 @@ def create_ip_prefix(prefix, role, pool):
             role = role.id,
             site = ld4.id,
             tenant = upstart_crow.id,
-            is_pool = pool)
-
-# define aggregate networks
-loopback_agg = netaddr.IPNetwork('150.0.0.0/8')
-interswitch_link_agg = netaddr.IPNetwork('155.0.0.0/8')
-oob_mgmt_agg = netaddr.IPNetwork('192.168.0.0/16')
-
-# create ip aggregates
-create_ip_aggregate(loopback_agg)
-create_ip_aggregate(interswitch_link_agg)
-create_ip_aggregate(oob_mgmt_agg)
+            is_pool = pool
+            )
 
 # create loopback prefixes
 x = 1
@@ -158,31 +164,57 @@ while x < 20:
 oob_mgmt = netaddr.IPNetwork('192.168.137.0/24')
 create_ip_prefix(oob_mgmt, 'oob_mgmt', False)
 
+# get manufacturers/vendors
+print(f"\nChecking DCIM manufacturers...")
+all_manufacturers = nb.dcim.manufacturers.all()
+
+def create_manufacturer(name):
+    slug = name.lower()
+    if name not in [x.name for x in all_manufacturers]:
+        print(f"\nAdding {name} to DCIM manufacturers...")
+        manufacturer = nb.dcim.manufacturers.create(
+            name = name,
+            slug = slug
+            )
+
 # add 'cisco' as a new manufacturer
-print(f"\nChecking DCIM vendor list...")
+create_manufacturer('cisco')
 cisco = nb.dcim.manufacturers.get(name='cisco')
-if not cisco:
-    cisco = nb.dcim.manufacturers.create(
-        name = 'cisco',
-        slug = 'cisco')
+
+# get platforms
+print(f"\nChecking DCIM platforms...")
+all_platforms = nb.dcim.platforms.all()
+
+def create_platform(name, vendor):
+    slug = name.lower()
+    if name not in [x.name for x in all_platforms]:
+        print(f"\nCreating {name} DCIM platform...")
+        platform = nb.dcim.platforms.create(
+            name = name,
+            manufactuer = vendor.id,
+            slug = slug
+            )
 
 # add 'ios' as a new platform
-print(f"\nChecking DCIM platform list...")
+create_platform('ios', cisco)
 ios = nb.dcim.platforms.get(name='ios')
-if not ios:
-    ios = nb.dcim.platforms.create(
-        name = 'ios',
-        slug = 'ios')
 
-# add the iosv device type
-print(f"\nChecking DCIM device types...")
-iosv = nb.dcim.device_types.get(model='iosv')
-if not iosv:
-    print(f"\nCreating IOSv device type...")
-    iosv = nb.dcim.device_types.create(
-        model = 'iosv',
-        manufacturer = ios.id,
-        slug = 'iosv')
+# get device_types
+all_device_types = nb.dcim.device_types.all()
+
+def create_device_type(name, vendor):
+    slug = name.lower()
+    if name not in [x.model for x in all_device_types]:
+        print(f"\nCreating {name} device_type...")
+        device_type = nb.dcim.device_types.create(
+            model = name,
+            manufacturer = vendor.id,
+            slug = slug
+            )
+
+# add 'iosv' as a device_type
+create_device_type('iosv', cisco)
+iosv = nb.dcim.device_types.get(name="iosv")
 
 # create ios interface template
 ios_interfaces = ['GigabitEthernet0/{0..5}']
