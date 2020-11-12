@@ -73,7 +73,7 @@ This build assumes:
    ```cd 01_deploy_controller```
 
 4. Execute the ansible playbook to update the controller with the required software:
-   ```ansible-playbook playbook.yml -i hosts.yml -u <username> -K
+   ```ansible-playbook playbook.yml -i hosts.yml -u <username> -K```
 
    Enter the sudo password when prompted.
 
