@@ -1,0 +1,18 @@
+{% for intf in nb_interfaces.json.results %}
+interface {{ intf.name }}
+{%      if intf.description is defined %}
+ description {{ intf.description|upper }}
+{%      endif %}
+{#%      for address in nb_ips.json.results %}
+{%              if address.interface.name == intf.name %}
+ ip address {{ address.address }}
+{%              endif %}
+{%      endfor %#}
+{%	if intf.name.startswith('Gigabit') %}
+ no shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+{%	endif %}
+!
+{% endfor %}

@@ -30,13 +30,13 @@
 
     - name: Get device interfaces from NetBox
       uri:
-        url: "{{ netbox_host }}/api/dcim/interfaces/?limit=10000&?device={{ inventory_hostname }}"
+        #url: "{{ netbox_host }}/api/dcim/interfaces/?limit=10000&?device={{ inventory_hostname }}"
+        url: "{{ netbox_host }}/api/dcim/interfaces/?device={{ inventory_hostname }}"
         method: GET
         body_format: json
         return_content: yes
         headers:
-          #accept: "application/json"
-          #Content-Type: application/json
+          accept: "application/json"
           Authorization: "Token {{ netbox_token }}"
       register: nb_interfaces
 
@@ -72,6 +72,7 @@
   gather_facts: no
   roles:
     - header
+    - interface
     - snmp
     - footer
   tasks:
