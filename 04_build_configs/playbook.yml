@@ -66,14 +66,16 @@
         state: directory
 
 
-          # - hosts: "all"
-          #   connection: network_cli
-          #   become: no
-          #   gather_facts: no
-          #   roles:
-          #     - ios_header
-          #   tasks:
-          #     - name: Assemble final configuration files
-          #       assemble:
-          #         src: "files/staging/{{ inventory_hostname }}"
-          #         dest: "files/complete/{{ inventory_hostname }}.cfg"
+- hosts: "all"
+  connection: network_cli
+  become: no
+  gather_facts: no
+  roles:
+    - header
+    - snmp
+    - footer
+  tasks:
+    - name: Assemble final configuration files
+      assemble:
+        src: "files/staging/{{ inventory_hostname }}"
+        dest: "files/complete/{{ inventory_hostname }}.cfg"

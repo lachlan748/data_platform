@@ -1,0 +1,9 @@
+---
+snmp_location: LD4
+
+snmp_contact: will@upstart_crow.com
+
+ntp_servers: 
+  - 81.128.218.110
+  - 185.208.170.29
+  - 95.215.175.2
