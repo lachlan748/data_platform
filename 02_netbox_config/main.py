@@ -492,3 +492,12 @@ while x < 6:
         patch_cables(spine2, leaf, f"GigabitEthernet0/{x}",
                      f"GigabitEthernet0/2")
         x += 1
+
+# shutdown unused leaf interfaces
+disabled_intf = ['GigabitEthernet0/3', 'GigabitEthernet0/4', 'GigabitEthernet0/5']
+for node in leafs:
+    for intf in disabled_intf:
+        print(f"\nDisabling leaf interfaces {intf}...")
+        nbintf = nb.dcim.interfaces.get(name=intf, device=node)
+        nbintf.enabled = False
+        nbintf.save()
