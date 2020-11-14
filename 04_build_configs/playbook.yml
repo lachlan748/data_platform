@@ -1,5 +1,29 @@
 ---
 - hosts: all
+  connection: local
+  gather_facts: False
+  vars:
+    working_dir: results
+  tasks:
+    - name: Creating staging directories
+      file:
+        dest: "files/staging/{{ inventory_hostname }}"
+        state: directory
+    - name: Creating results directories
+      file:
+        dest: "{{ working_dir }}/{{ inventory_hostname }}"
+        state: directory
+
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  tasks:
+    - name: Creating complete directory
+      file:
+        dest: "files/complete"
+        state: directory
+
+- hosts: all
   connection: network_cli
   become: no
   gather_facts: False
@@ -50,31 +74,15 @@
           Authorization: "Token {{ netbox_token }}"
       register: nb_ips
 
-    - name: Create staging directories
-      file:
-        dest: "files/staging/{{ inventory_hostname }}"
-        state: directory
-
-    - name: Create final config directory
-      file:
-        dest: "files/complete/"
-        state: directory
-
-    - name: Create results directories
-      file:
-        dest: "{{ working_dir }}/{{ inventory_hostname }}"
-        state: directory
-
-
 - hosts: "all"
   connection: network_cli
   become: no
   gather_facts: no
   roles:
-    - header
+      #- header
     - interface
-    - snmp
-    - footer
+      #- snmp
+      #- footer
   tasks:
     - name: Assemble final configuration files
       assemble:

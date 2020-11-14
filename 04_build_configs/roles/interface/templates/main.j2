@@ -1,15 +1,19 @@
 {% for intf in nb_interfaces.json.results %}
 interface {{ intf.name }}
-{%      if intf.description is defined %}
+{%      if intf.description|length %}
  description {{ intf.description|upper }}
 {%      endif %}
-{#%      for address in nb_ips.json.results %}
-{%              if address.interface.name == intf.name %}
- ip address {{ address.address }}
+{%      for ip in nb_ips.json.results %}
+{%              if ip.assigned_object.name == intf.name %}
+ ip address {{ ip.address|ipaddr('address') }} {{ ip.address|ipaddr('netmask') }}
 {%              endif %}
-{%      endfor %#}
-{%	if intf.name.startswith('Gigabit') %}
+{%      endfor %}
+{#%	if intf.enabled == True %}
  no shutdown
+{%	else %}
+ shutdown
+{%	endif %#}
+{%	if intf.name.startswith('Gigabit') %}
  duplex auto
  speed auto
  media-type rj45
