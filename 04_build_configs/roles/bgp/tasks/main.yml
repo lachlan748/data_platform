@@ -1,2 +1,6 @@
 ---
 # tasks file for bgp
+- name: Build bgp configuration
+  template:
+    src: main.j2
+    dest: ./files/staging/{{ inventory_hostname }}/{{ inventory_hostname }}.14_bgp

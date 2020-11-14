@@ -1,0 +1,9 @@
+router bgp {{ 65000 + inventory_hostname[-1]|int }}
+{% for ip in nb_ips.json.results %}
+{%	if ip.assigned_object.name|lower == 'loopback0' %}
+ bgp router-id {{ ip.address|ipaddr('address') }}
+{%	endif %}
+{% endfor %}
+ bgp log-neighbor-changes
+ neighbor 2.3.4.5 remote-as 1234
+!

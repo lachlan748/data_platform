@@ -79,10 +79,11 @@
   become: no
   gather_facts: no
   roles:
-      #- header
+    - header
     - interface
-      #- snmp
-      #- footer
+    - bgp
+    - snmp
+    - footer
   tasks:
     - name: Assemble final configuration files
       assemble:

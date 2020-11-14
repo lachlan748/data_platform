@@ -8,11 +8,11 @@ interface {{ intf.name }}
  ip address {{ ip.address|ipaddr('address') }} {{ ip.address|ipaddr('netmask') }}
 {%              endif %}
 {%      endfor %}
-{#%	if intf.enabled == True %}
+{%	if intf.enabled == True %}
  no shutdown
 {%	else %}
  shutdown
-{%	endif %#}
+{%	endif %}
 {%	if intf.name.startswith('Gigabit') %}
  duplex auto
  speed auto
