@@ -9,7 +9,15 @@ router bgp {{ 65000 + inventory_hostname[-1]|int }}
 {%	endif %}
 {% endfor %}
  bgp log-neighbor-changes
- network foo mask bar
+{% for intf in nb_interfaces.json.results %}
+{%     	for ip in nb_ips.json.results %}
+{%		if ip.assigned_object.name == intf.name %}
+{%			if intf.name|lower == 'loopback0' %}
+ network {{ ip.address|ipaddr('address') }} mask {{ ip.address|ipaddr('netmask') }}
+{%			endif %}
+{%		endif %}
+{%	endfor %}
+{% endfor %}
 {% for intf in nb_interfaces.json.results %}
 {%     	for ip in nb_ips.json.results %}
 {%		if ip.assigned_object.name == intf.name %}
