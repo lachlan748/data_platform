@@ -1,9 +1,29 @@
+{% if inventory_hostname.startswith('spine') %}
+router bgp 65000
+{% else %}
 router bgp {{ 65000 + inventory_hostname[-1]|int }}
+{% endif %}
 {% for ip in nb_ips.json.results %}
 {%	if ip.assigned_object.name|lower == 'loopback0' %}
  bgp router-id {{ ip.address|ipaddr('address') }}
 {%	endif %}
 {% endfor %}
  bgp log-neighbor-changes
- neighbor 2.3.4.5 remote-as 1234
+ network foo mask bar
+{% for intf in nb_interfaces.json.results %}
+{%     	for ip in nb_ips.json.results %}
+{%		if ip.assigned_object.name == intf.name %}
+{%			if inventory_hostname.startswith('leaf') %}
+{%				if intf.name|lower is in ['gigabitethernet0/1', 'gigabitethernet0/2'] %}
+ neighbor {{ ip.address|ipaddr('network') }} remote-as 65000
+{%				endif %}
+{%				else %}
+{%				if intf.name|lower is not in ['gigabitethernet0/0', 'loopback0'] %}
+ neighbor {{ ip.address|ipaddr(-1)|ipaddr('address') }} remote-as 6500{{ intf.description[4] }}
+{%				endif %}
+{%			endif %}
+{%		endif %}
+{%	endfor %}
+{% endfor %}
+ maximum-paths 2
 !
