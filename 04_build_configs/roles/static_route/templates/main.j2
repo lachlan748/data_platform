@@ -1,0 +1,4 @@
+{% for ntp_server in ntp_servers %}
+ip route vrf mgmt {{ ntp_server }} 255.255.255.255 192.168.137.1
+{% endfor %}
+!
