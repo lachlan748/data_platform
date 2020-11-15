@@ -31,8 +31,9 @@ banner login ^C
 line con 0
 line aux 0
 line vty 0 4
- login
- transport input none
+ exec-timeout 0 0
+ login local
+ transport input all
 !
 no scheduler allocate
 ntp server vrf mgmt 81.128.218.110

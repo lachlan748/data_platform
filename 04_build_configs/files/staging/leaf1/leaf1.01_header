@@ -33,6 +33,7 @@ ip vrf mgmt
 !
 !
 no ip domain lookup
+ip domain name upstart_crow.com
 ip multicast-routing 
 ip cef
 no ipv6 cef

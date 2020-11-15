@@ -1,5 +1,7 @@
 import getpass
 import time
+import telnetlib
+import re
 import urllib3
 from braceexpand import braceexpand
 from virl2_client import ClientLibrary
@@ -127,3 +129,31 @@ else:
 
     except Exception as e:
         print(f"\nError creating lab, {e}")
+
+# generate ssh rsa keys using telnet
+time.sleep(180)
+for node in nodes:
+    match = re.search(r'(192.168.137.\d+)', node.config, re.DOTALL)
+    if match:
+        mgmt_ip = match.group(1)
+    user = 'cisco'
+    password = 'cisco'
+    try:
+        tn = telnetlib.Telnet(mgmt_ip)
+        tn.read_until(b"Username: ")
+        tn.write(user.encode('ascii') + b"\n")
+        if password:
+           tn.read_until(b"Password: ")
+           tn.write(password.encode('ascii') + b"\n")
+           tn.write(b"enable\n")
+           tn.write(b"cisco\n")
+        tn.write(b"conf t\n")
+        tn.write(b"crypto key generate rsa\n")
+        tn.read_until(b"How many bits in the modulus [512]:")
+        tn.write(b"2048\n")
+        tn.read_until(b"%SSH-5-ENABLED: SSH 2.0 has been enabled")
+        tn.write(b"end\n")
+        tn.write(b"exit\n")
+
+    except Exception as e:
+        print(f"\nUnable to create SSH key for {node.label}...")

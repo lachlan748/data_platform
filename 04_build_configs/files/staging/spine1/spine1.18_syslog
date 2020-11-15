@@ -1,3 +1,6 @@
+ip ssh source-interface GigabitEthernet0/0
+ip ssh version 2
+!
 logging source-interface GigabitEthernet0/0 vrf mgmt
 logging host 192.168.137.100
 ipv6 ioam timestamp
