@@ -81,8 +81,9 @@
   roles:
     - header
     - interface
-    - static_route
     - bgp
+    - static_route
+    - syslog
     - snmp
     - footer
   tasks:

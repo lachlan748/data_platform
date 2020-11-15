@@ -7,6 +7,8 @@ snmp_ro_string: upstart_crow
 
 snmp_trap_server: 192.168.137.100
 
+syslog_server: 192.168.137.100
+
 ntp_servers: 
   - 81.128.218.110
   - 185.208.170.29
