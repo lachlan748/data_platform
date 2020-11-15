@@ -1,0 +1,6 @@
+snmp-server chassis-id SPINE2
+snmp-server contact will@upstart_crow.com
+snmp-server location LD4
+snmp-server community upstart_crow ro
+snmp-server host 192.168.137.100 vrf mgmt
+!

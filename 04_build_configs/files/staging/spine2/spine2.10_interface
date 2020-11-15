@@ -1,0 +1,54 @@
+interface GigabitEthernet0/0
+ description OOB_MGMT_INTF
+ ip vrf forwarding mgmt
+ ip address 192.168.137.242 255.255.255.0
+ no shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ description LEAF1_GIG0/2
+ ip address 155.1.11.10 255.255.255.254
+ no shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ description LEAF2_GIG0/2
+ ip address 155.1.11.12 255.255.255.254
+ no shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ description LEAF3_GIG0/2
+ ip address 155.1.11.14 255.255.255.254
+ no shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/4
+ description LEAF4_GIG0/2
+ ip address 155.1.11.16 255.255.255.254
+ no shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/5
+ description LEAF5_GIG0/2
+ ip address 155.1.11.18 255.255.255.254
+ no shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface Loopback0
+ description RID_INTF
+ ip address 150.1.2.2 255.255.255.255
+ no shutdown
+!

@@ -1,0 +1,1961 @@
+[
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 1,
+    "description": "oob_mgmt_intf",
+    "device": {
+      "display_name": "leaf1",
+      "id": 91,
+      "name": "leaf1",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/91/"
+    },
+    "enabled": true,
+    "id": 631,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": true,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/0",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/631/"
+  },
+  {
+    "cable": {
+      "id": 71,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/71/"
+    },
+    "connected_endpoint": {
+      "cable": 71,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "spine1",
+        "id": 89,
+        "name": "spine1",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/89/"
+      },
+      "id": 618,
+      "name": "GigabitEthernet0/1",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/618/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "spine1_gig0/1",
+    "device": {
+      "display_name": "leaf1",
+      "id": 91,
+      "name": "leaf1",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/91/"
+    },
+    "enabled": true,
+    "id": 632,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/1",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/632/"
+  },
+  {
+    "cable": {
+      "id": 72,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/72/"
+    },
+    "connected_endpoint": {
+      "cable": 72,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "spine2",
+        "id": 90,
+        "name": "spine2",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/90/"
+      },
+      "id": 625,
+      "name": "GigabitEthernet0/1",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/625/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "spine2_gig0/1",
+    "device": {
+      "display_name": "leaf1",
+      "id": 91,
+      "name": "leaf1",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/91/"
+    },
+    "enabled": true,
+    "id": 633,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/2",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/633/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 0,
+    "description": "",
+    "device": {
+      "display_name": "leaf1",
+      "id": 91,
+      "name": "leaf1",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/91/"
+    },
+    "enabled": true,
+    "id": 634,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/3",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/634/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 0,
+    "description": "",
+    "device": {
+      "display_name": "leaf1",
+      "id": 91,
+      "name": "leaf1",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/91/"
+    },
+    "enabled": true,
+    "id": 635,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/4",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/635/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 0,
+    "description": "",
+    "device": {
+      "display_name": "leaf1",
+      "id": 91,
+      "name": "leaf1",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/91/"
+    },
+    "enabled": true,
+    "id": 636,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/5",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/636/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 1,
+    "description": "rid_intf",
+    "device": {
+      "display_name": "leaf1",
+      "id": 91,
+      "name": "leaf1",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/91/"
+    },
+    "enabled": true,
+    "id": 637,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "Loopback0",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "Virtual",
+      "value": "virtual"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/637/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 1,
+    "description": "oob_mgmt_intf",
+    "device": {
+      "display_name": "leaf2",
+      "id": 92,
+      "name": "leaf2",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/92/"
+    },
+    "enabled": true,
+    "id": 638,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": true,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/0",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/638/"
+  },
+  {
+    "cable": {
+      "id": 73,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/73/"
+    },
+    "connected_endpoint": {
+      "cable": 73,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "spine1",
+        "id": 89,
+        "name": "spine1",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/89/"
+      },
+      "id": 619,
+      "name": "GigabitEthernet0/2",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/619/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "spine1_gig0/2",
+    "device": {
+      "display_name": "leaf2",
+      "id": 92,
+      "name": "leaf2",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/92/"
+    },
+    "enabled": true,
+    "id": 639,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/1",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/639/"
+  },
+  {
+    "cable": {
+      "id": 74,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/74/"
+    },
+    "connected_endpoint": {
+      "cable": 74,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "spine2",
+        "id": 90,
+        "name": "spine2",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/90/"
+      },
+      "id": 626,
+      "name": "GigabitEthernet0/2",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/626/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "spine2_gig0/2",
+    "device": {
+      "display_name": "leaf2",
+      "id": 92,
+      "name": "leaf2",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/92/"
+    },
+    "enabled": true,
+    "id": 640,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/2",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/640/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 0,
+    "description": "",
+    "device": {
+      "display_name": "leaf2",
+      "id": 92,
+      "name": "leaf2",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/92/"
+    },
+    "enabled": true,
+    "id": 641,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/3",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/641/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 0,
+    "description": "",
+    "device": {
+      "display_name": "leaf2",
+      "id": 92,
+      "name": "leaf2",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/92/"
+    },
+    "enabled": true,
+    "id": 642,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/4",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/642/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 0,
+    "description": "",
+    "device": {
+      "display_name": "leaf2",
+      "id": 92,
+      "name": "leaf2",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/92/"
+    },
+    "enabled": true,
+    "id": 643,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/5",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/643/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 1,
+    "description": "rid_intf",
+    "device": {
+      "display_name": "leaf2",
+      "id": 92,
+      "name": "leaf2",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/92/"
+    },
+    "enabled": true,
+    "id": 644,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "Loopback0",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "Virtual",
+      "value": "virtual"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/644/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 1,
+    "description": "oob_mgmt_intf",
+    "device": {
+      "display_name": "leaf3",
+      "id": 93,
+      "name": "leaf3",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/93/"
+    },
+    "enabled": true,
+    "id": 645,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": true,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/0",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/645/"
+  },
+  {
+    "cable": {
+      "id": 75,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/75/"
+    },
+    "connected_endpoint": {
+      "cable": 75,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "spine1",
+        "id": 89,
+        "name": "spine1",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/89/"
+      },
+      "id": 620,
+      "name": "GigabitEthernet0/3",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/620/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "spine1_gig0/3",
+    "device": {
+      "display_name": "leaf3",
+      "id": 93,
+      "name": "leaf3",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/93/"
+    },
+    "enabled": true,
+    "id": 646,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/1",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/646/"
+  },
+  {
+    "cable": {
+      "id": 76,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/76/"
+    },
+    "connected_endpoint": {
+      "cable": 76,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "spine2",
+        "id": 90,
+        "name": "spine2",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/90/"
+      },
+      "id": 627,
+      "name": "GigabitEthernet0/3",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/627/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "spine2_gig0/3",
+    "device": {
+      "display_name": "leaf3",
+      "id": 93,
+      "name": "leaf3",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/93/"
+    },
+    "enabled": true,
+    "id": 647,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/2",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/647/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 0,
+    "description": "",
+    "device": {
+      "display_name": "leaf3",
+      "id": 93,
+      "name": "leaf3",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/93/"
+    },
+    "enabled": true,
+    "id": 648,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/3",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/648/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 0,
+    "description": "",
+    "device": {
+      "display_name": "leaf3",
+      "id": 93,
+      "name": "leaf3",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/93/"
+    },
+    "enabled": true,
+    "id": 649,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/4",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/649/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 0,
+    "description": "",
+    "device": {
+      "display_name": "leaf3",
+      "id": 93,
+      "name": "leaf3",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/93/"
+    },
+    "enabled": true,
+    "id": 650,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/5",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/650/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 1,
+    "description": "rid_intf",
+    "device": {
+      "display_name": "leaf3",
+      "id": 93,
+      "name": "leaf3",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/93/"
+    },
+    "enabled": true,
+    "id": 651,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "Loopback0",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "Virtual",
+      "value": "virtual"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/651/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 1,
+    "description": "oob_mgmt_intf",
+    "device": {
+      "display_name": "leaf4",
+      "id": 94,
+      "name": "leaf4",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/94/"
+    },
+    "enabled": true,
+    "id": 652,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": true,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/0",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/652/"
+  },
+  {
+    "cable": {
+      "id": 77,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/77/"
+    },
+    "connected_endpoint": {
+      "cable": 77,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "spine1",
+        "id": 89,
+        "name": "spine1",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/89/"
+      },
+      "id": 621,
+      "name": "GigabitEthernet0/4",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/621/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "spine1_gig0/4",
+    "device": {
+      "display_name": "leaf4",
+      "id": 94,
+      "name": "leaf4",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/94/"
+    },
+    "enabled": true,
+    "id": 653,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/1",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/653/"
+  },
+  {
+    "cable": {
+      "id": 78,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/78/"
+    },
+    "connected_endpoint": {
+      "cable": 78,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "spine2",
+        "id": 90,
+        "name": "spine2",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/90/"
+      },
+      "id": 628,
+      "name": "GigabitEthernet0/4",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/628/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "spine2_gig0/4",
+    "device": {
+      "display_name": "leaf4",
+      "id": 94,
+      "name": "leaf4",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/94/"
+    },
+    "enabled": true,
+    "id": 654,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/2",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/654/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 0,
+    "description": "",
+    "device": {
+      "display_name": "leaf4",
+      "id": 94,
+      "name": "leaf4",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/94/"
+    },
+    "enabled": true,
+    "id": 655,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/3",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/655/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 0,
+    "description": "",
+    "device": {
+      "display_name": "leaf4",
+      "id": 94,
+      "name": "leaf4",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/94/"
+    },
+    "enabled": true,
+    "id": 656,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/4",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/656/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 0,
+    "description": "",
+    "device": {
+      "display_name": "leaf4",
+      "id": 94,
+      "name": "leaf4",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/94/"
+    },
+    "enabled": true,
+    "id": 657,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/5",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/657/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 1,
+    "description": "rid_intf",
+    "device": {
+      "display_name": "leaf4",
+      "id": 94,
+      "name": "leaf4",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/94/"
+    },
+    "enabled": true,
+    "id": 658,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "Loopback0",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "Virtual",
+      "value": "virtual"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/658/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 1,
+    "description": "oob_mgmt_intf",
+    "device": {
+      "display_name": "leaf5",
+      "id": 95,
+      "name": "leaf5",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/95/"
+    },
+    "enabled": true,
+    "id": 659,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": true,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/0",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/659/"
+  },
+  {
+    "cable": {
+      "id": 79,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/79/"
+    },
+    "connected_endpoint": {
+      "cable": 79,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "spine1",
+        "id": 89,
+        "name": "spine1",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/89/"
+      },
+      "id": 622,
+      "name": "GigabitEthernet0/5",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/622/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "spine1_gig0/5",
+    "device": {
+      "display_name": "leaf5",
+      "id": 95,
+      "name": "leaf5",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/95/"
+    },
+    "enabled": true,
+    "id": 660,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/1",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/660/"
+  },
+  {
+    "cable": {
+      "id": 80,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/80/"
+    },
+    "connected_endpoint": {
+      "cable": 80,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "spine2",
+        "id": 90,
+        "name": "spine2",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/90/"
+      },
+      "id": 629,
+      "name": "GigabitEthernet0/5",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/629/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "spine2_gig0/5",
+    "device": {
+      "display_name": "leaf5",
+      "id": 95,
+      "name": "leaf5",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/95/"
+    },
+    "enabled": true,
+    "id": 661,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/2",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/661/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 0,
+    "description": "",
+    "device": {
+      "display_name": "leaf5",
+      "id": 95,
+      "name": "leaf5",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/95/"
+    },
+    "enabled": true,
+    "id": 662,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/3",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/662/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 0,
+    "description": "",
+    "device": {
+      "display_name": "leaf5",
+      "id": 95,
+      "name": "leaf5",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/95/"
+    },
+    "enabled": true,
+    "id": 663,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/4",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/663/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 0,
+    "description": "",
+    "device": {
+      "display_name": "leaf5",
+      "id": 95,
+      "name": "leaf5",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/95/"
+    },
+    "enabled": true,
+    "id": 664,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/5",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/664/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 1,
+    "description": "rid_intf",
+    "device": {
+      "display_name": "leaf5",
+      "id": 95,
+      "name": "leaf5",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/95/"
+    },
+    "enabled": true,
+    "id": 665,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "Loopback0",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "Virtual",
+      "value": "virtual"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/665/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 1,
+    "description": "oob_mgmt_intf",
+    "device": {
+      "display_name": "spine1",
+      "id": 89,
+      "name": "spine1",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/89/"
+    },
+    "enabled": true,
+    "id": 617,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": true,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/0",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/617/"
+  },
+  {
+    "cable": {
+      "id": 71,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/71/"
+    },
+    "connected_endpoint": {
+      "cable": 71,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "leaf1",
+        "id": 91,
+        "name": "leaf1",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/91/"
+      },
+      "id": 632,
+      "name": "GigabitEthernet0/1",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/632/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "leaf1_gig0/1",
+    "device": {
+      "display_name": "spine1",
+      "id": 89,
+      "name": "spine1",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/89/"
+    },
+    "enabled": true,
+    "id": 618,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/1",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/618/"
+  },
+  {
+    "cable": {
+      "id": 73,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/73/"
+    },
+    "connected_endpoint": {
+      "cable": 73,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "leaf2",
+        "id": 92,
+        "name": "leaf2",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/92/"
+      },
+      "id": 639,
+      "name": "GigabitEthernet0/1",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/639/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "leaf2_gig0/1",
+    "device": {
+      "display_name": "spine1",
+      "id": 89,
+      "name": "spine1",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/89/"
+    },
+    "enabled": true,
+    "id": 619,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/2",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/619/"
+  },
+  {
+    "cable": {
+      "id": 75,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/75/"
+    },
+    "connected_endpoint": {
+      "cable": 75,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "leaf3",
+        "id": 93,
+        "name": "leaf3",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/93/"
+      },
+      "id": 646,
+      "name": "GigabitEthernet0/1",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/646/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "leaf3_gig0/1",
+    "device": {
+      "display_name": "spine1",
+      "id": 89,
+      "name": "spine1",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/89/"
+    },
+    "enabled": true,
+    "id": 620,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/3",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/620/"
+  },
+  {
+    "cable": {
+      "id": 77,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/77/"
+    },
+    "connected_endpoint": {
+      "cable": 77,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "leaf4",
+        "id": 94,
+        "name": "leaf4",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/94/"
+      },
+      "id": 653,
+      "name": "GigabitEthernet0/1",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/653/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "leaf4_gig0/1",
+    "device": {
+      "display_name": "spine1",
+      "id": 89,
+      "name": "spine1",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/89/"
+    },
+    "enabled": true,
+    "id": 621,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/4",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/621/"
+  },
+  {
+    "cable": {
+      "id": 79,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/79/"
+    },
+    "connected_endpoint": {
+      "cable": 79,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "leaf5",
+        "id": 95,
+        "name": "leaf5",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/95/"
+      },
+      "id": 660,
+      "name": "GigabitEthernet0/1",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/660/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "leaf5_gig0/1",
+    "device": {
+      "display_name": "spine1",
+      "id": 89,
+      "name": "spine1",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/89/"
+    },
+    "enabled": true,
+    "id": 622,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/5",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/622/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 1,
+    "description": "rid_intf",
+    "device": {
+      "display_name": "spine1",
+      "id": 89,
+      "name": "spine1",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/89/"
+    },
+    "enabled": true,
+    "id": 623,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "Loopback0",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "Virtual",
+      "value": "virtual"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/623/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 1,
+    "description": "oob_mgmt_intf",
+    "device": {
+      "display_name": "spine2",
+      "id": 90,
+      "name": "spine2",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/90/"
+    },
+    "enabled": true,
+    "id": 624,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": true,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/0",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/624/"
+  },
+  {
+    "cable": {
+      "id": 72,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/72/"
+    },
+    "connected_endpoint": {
+      "cable": 72,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "leaf1",
+        "id": 91,
+        "name": "leaf1",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/91/"
+      },
+      "id": 633,
+      "name": "GigabitEthernet0/2",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/633/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "leaf1_gig0/2",
+    "device": {
+      "display_name": "spine2",
+      "id": 90,
+      "name": "spine2",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/90/"
+    },
+    "enabled": true,
+    "id": 625,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/1",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/625/"
+  },
+  {
+    "cable": {
+      "id": 74,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/74/"
+    },
+    "connected_endpoint": {
+      "cable": 74,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "leaf2",
+        "id": 92,
+        "name": "leaf2",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/92/"
+      },
+      "id": 640,
+      "name": "GigabitEthernet0/2",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/640/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "leaf2_gig0/2",
+    "device": {
+      "display_name": "spine2",
+      "id": 90,
+      "name": "spine2",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/90/"
+    },
+    "enabled": true,
+    "id": 626,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/2",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/626/"
+  },
+  {
+    "cable": {
+      "id": 76,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/76/"
+    },
+    "connected_endpoint": {
+      "cable": 76,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "leaf3",
+        "id": 93,
+        "name": "leaf3",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/93/"
+      },
+      "id": 647,
+      "name": "GigabitEthernet0/2",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/647/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "leaf3_gig0/2",
+    "device": {
+      "display_name": "spine2",
+      "id": 90,
+      "name": "spine2",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/90/"
+    },
+    "enabled": true,
+    "id": 627,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/3",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/627/"
+  },
+  {
+    "cable": {
+      "id": 78,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/78/"
+    },
+    "connected_endpoint": {
+      "cable": 78,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "leaf4",
+        "id": 94,
+        "name": "leaf4",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/94/"
+      },
+      "id": 654,
+      "name": "GigabitEthernet0/2",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/654/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "leaf4_gig0/2",
+    "device": {
+      "display_name": "spine2",
+      "id": 90,
+      "name": "spine2",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/90/"
+    },
+    "enabled": true,
+    "id": 628,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/4",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/628/"
+  },
+  {
+    "cable": {
+      "id": 80,
+      "label": "",
+      "url": "http://192.168.137.100:8000/api/dcim/cables/80/"
+    },
+    "connected_endpoint": {
+      "cable": 80,
+      "connection_status": {
+        "label": "Connected",
+        "value": true
+      },
+      "device": {
+        "display_name": "leaf5",
+        "id": 95,
+        "name": "leaf5",
+        "url": "http://192.168.137.100:8000/api/dcim/devices/95/"
+      },
+      "id": 661,
+      "name": "GigabitEthernet0/2",
+      "url": "http://192.168.137.100:8000/api/dcim/interfaces/661/"
+    },
+    "connected_endpoint_type": "dcim.interface",
+    "connection_status": {
+      "label": "Connected",
+      "value": true
+    },
+    "count_ipaddresses": 1,
+    "description": "leaf5_gig0/2",
+    "device": {
+      "display_name": "spine2",
+      "id": 90,
+      "name": "spine2",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/90/"
+    },
+    "enabled": true,
+    "id": 629,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "GigabitEthernet0/5",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "1000BASE-T (1GE)",
+      "value": "1000base-t"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/629/"
+  },
+  {
+    "cable": null,
+    "connected_endpoint": null,
+    "connected_endpoint_type": null,
+    "connection_status": null,
+    "count_ipaddresses": 1,
+    "description": "rid_intf",
+    "device": {
+      "display_name": "spine2",
+      "id": 90,
+      "name": "spine2",
+      "url": "http://192.168.137.100:8000/api/dcim/devices/90/"
+    },
+    "enabled": true,
+    "id": 630,
+    "label": "",
+    "lag": null,
+    "mac_address": null,
+    "mgmt_only": false,
+    "mode": null,
+    "mtu": null,
+    "name": "Loopback0",
+    "tagged_vlans": [],
+    "tags": [],
+    "type": {
+      "label": "Virtual",
+      "value": "virtual"
+    },
+    "untagged_vlan": null,
+    "url": "http://192.168.137.100:8000/api/dcim/interfaces/630/"
+  }
+]

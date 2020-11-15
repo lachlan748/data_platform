@@ -1,0 +1,48 @@
+interface GigabitEthernet0/0
+ description OOB_MGMT_INTF
+ ip vrf forwarding mgmt
+ ip address 192.168.137.243 255.255.255.0
+ no shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ description SPINE1_GIG0/1
+ ip address 155.1.11.1 255.255.255.254
+ no shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ description SPINE2_GIG0/1
+ ip address 155.1.11.11 255.255.255.254
+ no shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/4
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/5
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface Loopback0
+ description RID_INTF
+ ip address 150.1.3.3 255.255.255.255
+ no shutdown
+!
