@@ -109,7 +109,10 @@ else:
         # set sample bootstrap config for spine + leaf
         print(f"\nBootstrapping router configs..")
         for node in nodes:
-            node.config = (f"hostname {node.label}\n!\nntp server 1.2.3.4")
+            path = '../04_build_configs/files/complete/'
+            with open(f"{path}/{node.label}.cfg") as fh:
+                config_file = fh.read()
+            node.config = config_file
 
         # start nodes incrementally
         print(f"\nStarting node: ext_conn")
