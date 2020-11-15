@@ -22,6 +22,7 @@ mmi snmp-timeout 180
 !
 !
 !
+username cisco privilege 15 secret 0 cisco
 !
 !
 !
