@@ -183,8 +183,6 @@ try:
 except Exception as e:
     print(f"\nError creating lab, {e}")
 
-sys.exit(1)
-
 # wait 3 mins for topology to start
 time.sleep(180)
 
