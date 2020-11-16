@@ -130,32 +130,38 @@ try:
 except Exception as e:
     print(f"\nError creating lab, {e}")
 
-sys.exit(1)
-
-# generate ssh rsa keys using telnet <- More work required here
+# wait 3 mins for topology to start
 time.sleep(180)
+
+# generate ssh rsa keys using telnet
 for node in nodes:
+    # get mgmt IP address via api
     match = re.search(r'(192.168.137.\d+)', node.config, re.DOTALL)
     if match:
         mgmt_ip = match.group(1)
     user = 'cisco'
     password = 'cisco'
     try:
+        print(f"\nGenerating SSH public keys on {node.label}...")
         tn = telnetlib.Telnet(mgmt_ip)
+        tn.set_debuglevel(1)
         tn.read_until(b"Username: ")
         tn.write(user.encode('ascii') + b"\n")
         if password:
-           tn.read_until(b"Password: ")
-           tn.write(password.encode('ascii') + b"\n")
-           tn.write(b"enable\n")
-           tn.write(b"cisco\n")
+            tn.read_until(b"Password: ")
+            tn.write(password.encode('ascii') + b"\n")
         tn.write(b"conf t\n")
         tn.write(b"crypto key generate rsa\n")
         tn.read_until(b"How many bits in the modulus [512]:")
         tn.write(b"2048\n")
-        tn.read_until(b"%SSH-5-ENABLED: SSH 2.0 has been enabled")
+        time.sleep(5)
+        tn.write(b"\n")
         tn.write(b"end\n")
         tn.write(b"exit\n")
+        print(tn.read_all())
+        time.sleep(15)
 
     except Exception as e:
         print(f"\nUnable to create SSH key for {node.label}...")
+
+print(f"\nJob complete.")
