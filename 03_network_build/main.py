@@ -50,8 +50,13 @@ try:
     leaf3 = lab.create_node("leaf3", "iosv", 400, 300, populate_interfaces=True)
     leaf4 = lab.create_node("leaf4", "iosv", 600, 300, populate_interfaces=True)
     leaf5 = lab.create_node("leaf5", "iosv", 800, 300, populate_interfaces=True)
-    unmanaged_switch = lab.create_node("unmanaged_switch", "unmanaged_switch", 550, 500, populate_interfaces=True)
-    ext_conn = lab.create_node("ext_conn", "external_connector", 300, 500, populate_interfaces=True)
+    switch1 = lab.create_node("switch1",
+        "unmanaged_switch", 550, 500, populate_interfaces=True)
+    switch2 = lab.create_node("switch2",
+        "unmanaged_switch", 400, 500, populate_interfaces=True)
+    ext_conn = lab.create_node("ext_conn", "external_connector", 250, 500, populate_interfaces=True)
+    server1 = lab.create_node("server1", "server", 0, 100, populate_interfaces=True)
+    server2 = lab.create_node("server2", "server", 800, 100, populate_interfaces=True)
 
     # create additional interfaces for spines
     print(f"\nCreating additional interfaces to spines..")
@@ -62,10 +67,17 @@ try:
             print(f"\nAdding {intf} to {node}")
             intf = node.create_interface()
 
+    # create additional interfaces for servers
+    print(f"\nCreating additional interfaces for servers..")
+    servers = [server1, server2]
+    for server in servers:
+        print(f"\nAdding eth1 to {node}")
+        intf = server.create_interface()
+
     # place all nodes in a list
     nodes = [spine1, spine2, leaf1, leaf2, leaf3, leaf4, leaf5]
 
-    # connect clos fabric - spine1   <-- MORE WORK HERE, convert to function and YAML
+    # connect clos fabric - spine1
     print(f"\nConnecting topology..")
     lab.create_link(spine1.get_interface_by_label('GigabitEthernet0/1'),
                     leaf1.get_interface_by_label('GigabitEthernet0/1'))
@@ -90,25 +102,42 @@ try:
     lab.create_link(spine2.get_interface_by_label('GigabitEthernet0/5'),
                     leaf5.get_interface_by_label('GigabitEthernet0/2'))
 
+    # connect clos fabric -  servers
+    lab.create_link(server1.get_interface_by_label('eth0'),
+                    leaf1.get_interface_by_label('GigabitEthernet0/3'))
+    lab.create_link(server2.get_interface_by_label('eth0'),
+                    leaf5.get_interface_by_label('GigabitEthernet0/3'))
+
+    # connect OOB conns for servers
+    lab.create_link(server1.get_interface_by_label('eth1'),
+                     switch2.get_interface_by_label('port2'))
+    lab.create_link(server2.get_interface_by_label('eth1'),
+                     switch2.get_interface_by_label('port3'))
+
 
     # create OOB conns for spine and leaf
     print(f"\nConnecting router to OOB unmanaged switch..")
     port_num = 0
     for node in nodes:
         lab.create_link(node.get_interface_by_label('GigabitEthernet0/0'),
-                        unmanaged_switch.get_interface_by_label(f"port{port_num}"))
+                        switch1.get_interface_by_label(f"port{port_num}"))
         port_num = port_num + 1
+
+    # connect switch1 to switch2
+    print(f"\nConnecting unmanaged switches..")
+    lab.create_link(switch1.get_interface_by_label('port7'),
+        switch2.get_interface_by_label('port7'))
 
     # connect unmanaged_switch to ext-conn
     print(f"\nConnecting unmanaged switch to external connector..")
-    lab.create_link(unmanaged_switch.get_interface_by_label('port7'),
+    lab.create_link(switch2.get_interface_by_label('port1'),
                     ext_conn.get_interface_by_label('port'))
 
     # set ext-conn as bridge mode
     print(f"\nSetting external connector to bridge mode..")
     ext_conn.config = 'bridge0'
 
-    # set sample bootstrap config for spine + leaf
+    # set bootstrap config for spine + leaf
     print(f"\nBootstrapping router configs..")
     for node in nodes:
         path = '../04_build_configs/files/complete/'
@@ -116,19 +145,43 @@ try:
             config_file = fh.read()
         node.config = config_file
 
+    # set server1 bootstrap config
+    print(f"\nBootstrapping server configs..")
+    servers = [server1, server2]
+    x = 208
+    for server in servers:
+        server_config = (
+            f"hostname {server.label}\n"
+            f"ifconfig eth0 192.168.1.{x} netmask 255.255.255.0 up\n"
+            f"ifconfig eth1 192.168.137.{x} netmask 255.255.255.0 up\n"
+            f"route add -net 0.0.0.0/0 dev eth1\n"
+            f"route add -net 150.1.0.0/16 dev eth0\n")
+        x += 1
+        server.config = server_config
+
     # start nodes incrementally
     print(f"\nStarting node: ext_conn")
     ext_conn.start()
-    print(f"\nStarting node: unmanaged_switch")
-    unmanaged_switch.start()
+    print(f"\nStarting node: switch1")
+    switch1.start()
+    print(f"\nStarting node: switch2")
+    switch2.start()
     for node in nodes:
         print(f"\nStarting node: {node}")
         node.start()
-        # 15sec delay before starting each veos node
-        time.sleep(15)
+        # 20sec delay before starting each veos node
+        time.sleep(20)
+    print(f"\nStarting node: server1")
+    server1.start()
+    time.sleep(20)
+    print(f"\nStarting node: server2")
+    server2.start()
+    time.sleep(20)
 
 except Exception as e:
     print(f"\nError creating lab, {e}")
+
+sys.exit(1)
 
 # wait 3 mins for topology to start
 time.sleep(180)
