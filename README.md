@@ -53,7 +53,7 @@ This build assumes:
 
 1. On your python/ansible controller, clone this repository
 
-2. Create a new virtualenv ```pythont3 -m venv venv```
+2. Create a new virtualenv ```python3 -m venv venv```
 
 3. Start the virtualenv ```source venv/bin/activate```
 
@@ -61,7 +61,7 @@ This build assumes:
 
 ## Method
 
-### Data Controller
+### 1. Data Controller
 
 1. Setup your controller node by installing Centos 7. This node will host
    netbox, ELK and Ansible Tower (AWX).
@@ -73,7 +73,8 @@ This build assumes:
 3. Within this repo, move to the 01_deploy_controller directory:
    ```cd 01_deploy_controller```
 
-4. Execute the ansible playbook to update the controller with the required software:
+4. Execute the ansible playbook to update the controller with the required
+   software:
    ```ansible-playbook playbook.yml -i hosts.yml -u <username> -K```
 
    Enter the sudo password when prompted.
@@ -87,4 +88,33 @@ This build assumes:
    To check logs for the netbox containers, type:
    ```docker logs <container_id>```
 
-WORK IN PROGRESS
+### 2. Netbox
+
+1. Move to 02_network_build directory
+   ```cd 02_network_build```
+
+2. Push the inventory and IPAM data into Netbox, execute:
+   ```python3 main.py```
+
+Netbox should now be accessible on http://192.168.137.100:8000
+
+### 3. Generate network node config files
+
+1. Move to the 04_network_build directory
+   ```cd 04_build_configs```
+
+2. Get Ansible to generate the network config files based on data in Netbox,
+   execute:
+   ```ansible-playbook playbook.yml -i hosts.yml```
+
+Config files will be stored in files/complete/ directory.
+
+### 4. Create the topology and bootstrap network nodes
+
+1. Move to 03_network_build
+   ```cd 03_network_build```
+
+2. Create the virtual network topology into CML, execute:
+   ```python3 main.py```
+
+The network topology should now be accessible via CML.

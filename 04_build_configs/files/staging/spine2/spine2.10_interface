@@ -1,7 +1,7 @@
 interface GigabitEthernet0/0
  description OOB_MGMT_INTF
  ip vrf forwarding mgmt
- ip address 192.168.137.242 255.255.255.0
+ ip address 192.168.137.202 255.255.255.0
  no shutdown
  duplex auto
  speed auto
