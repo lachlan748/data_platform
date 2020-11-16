@@ -156,7 +156,8 @@ try:
             f"ifconfig eth0 192.168.{y}.{x} netmask 255.255.255.0 up\n"
             f"ifconfig eth1 192.168.137.{x} netmask 255.255.255.0 up\n"
             f"route add -net 0.0.0.0/0 dev eth1\n"
-            f"route add -net 150.1.0.0/16 dev eth0\n")
+            f"route add -net 150.1.0.0/16 dev eth0\n"
+            f"route add -net 192.168.0.0/16 dev eth0\n")
         x += 1
         y += 100
         server.config = server_config
