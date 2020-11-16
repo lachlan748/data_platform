@@ -4,3 +4,6 @@ snmp-server location LD4
 snmp-server community upstart_crow ro
 snmp-server host 192.168.137.100 vrf mgmt
 !
+access-list 100 deny udp host 192.168.137.1 eq bootps any eq bootpc
+access-list 100 permit ip any any
+!

@@ -4,3 +4,6 @@ snmp-server location {{ snmp_location }}
 snmp-server community {{ snmp_ro_string }} ro
 snmp-server host {{ snmp_trap_server }} vrf mgmt
 !
+access-list 100 deny udp host 192.168.137.1 eq bootps any eq bootpc
+access-list 100 permit ip any any
+!
