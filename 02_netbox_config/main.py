@@ -125,6 +125,7 @@ def create_ipam_role(role_name):
 # create ipam roles for subnet
 create_ipam_role('loopback')
 create_ipam_role('oob_mgmt')
+create_ipam_role('server_mgmt')
 create_ipam_role('interswitch_link')
 
 # get active aggregates
@@ -211,6 +212,12 @@ while x < 20:
 oob_mgmt = netaddr.IPNetwork('192.168.137.0/24')
 create_ip_prefix(oob_mgmt, 'oob_mgmt', ld4, upstart_crow, False)
 oob_mgmt = nb.ipam.prefixes.get(prefix='192.168.137.0/24')
+
+# create server LAN prefixes
+server_lan1 = netaddr.IPNetwork('192.168.100.0/24')
+server_lan2 = netaddr.IPNetwork('192.168.200.0/24')
+create_ip_prefix(server_lan1, 'server_mgmt', ld4, upstart_crow, False)
+create_ip_prefix(server_lan2, 'server_mgmt', ld4, upstart_crow, False)
 
 # assign vrf to oob_mgmt
 oob_mgmt.vrf = mgmt_vrf.id
@@ -501,3 +508,11 @@ for node in leafs:
         nbintf = nb.dcim.interfaces.get(name=intf, device=node)
         nbintf.enabled = False
         nbintf.save()
+    # enable gig0/3 for server connectivity
+    if node in [leaf1, leaf5]:
+        print(f"\nEnabled GigabitEthernet0/3 on {node}...")
+        gig3 = nb.dcim.interfaces.get(name='GigabitEthernet0/3', device=node)
+        gig3.enabled = True
+        gig3.save()
+
+print(f"\nJob complete.")

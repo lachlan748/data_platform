@@ -25,7 +25,9 @@ interface GigabitEthernet0/2
  media-type rj45
 !
 interface GigabitEthernet0/3
- shutdown
+ description SERVER_LAN
+ ip address 192.168.100.1 255.255.255.0
+ no shutdown
  duplex auto
  speed auto
  media-type rj45

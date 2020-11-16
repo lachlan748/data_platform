@@ -140,7 +140,7 @@ try:
     # set bootstrap config for spine + leaf
     print(f"\nBootstrapping router configs..")
     for node in nodes:
-        path = '../04_build_configs/files/complete/'
+        path = '../03_build_configs/files/complete/'
         with open(f"{path}/{node.label}.cfg") as fh:
             config_file = fh.read()
         node.config = config_file
@@ -149,14 +149,16 @@ try:
     print(f"\nBootstrapping server configs..")
     servers = [server1, server2]
     x = 208
+    y = 100
     for server in servers:
         server_config = (
             f"hostname {server.label}\n"
-            f"ifconfig eth0 192.168.1.{x} netmask 255.255.255.0 up\n"
+            f"ifconfig eth0 192.168.{y}.{x} netmask 255.255.255.0 up\n"
             f"ifconfig eth1 192.168.137.{x} netmask 255.255.255.0 up\n"
             f"route add -net 0.0.0.0/0 dev eth1\n"
             f"route add -net 150.1.0.0/16 dev eth0\n")
         x += 1
+        y += 100
         server.config = server_config
 
     # start nodes incrementally
