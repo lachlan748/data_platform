@@ -55,8 +55,8 @@ try:
     switch2 = lab.create_node("switch2",
         "unmanaged_switch", 400, 500, populate_interfaces=True)
     ext_conn = lab.create_node("ext_conn", "external_connector", 250, 500, populate_interfaces=True)
-    server1 = lab.create_node("server1", "server", 0, 100, populate_interfaces=True)
-    server2 = lab.create_node("server2", "server", 800, 100, populate_interfaces=True)
+    server1 = lab.create_node("server1", "ubuntu", 0, 100, populate_interfaces=True)
+    server2 = lab.create_node("server2", "ubuntu", 800, 100, populate_interfaces=True)
 
     # create additional interfaces for spines
     print(f"\nCreating additional interfaces to spines..")
@@ -71,7 +71,7 @@ try:
     print(f"\nCreating additional interfaces for servers..")
     servers = [server1, server2]
     for server in servers:
-        print(f"\nAdding eth1 to {node}")
+        print(f"\nAdding enp0s3 to {node}")
         intf = server.create_interface()
 
     # place all nodes in a list
@@ -103,15 +103,15 @@ try:
                     leaf5.get_interface_by_label('GigabitEthernet0/2'))
 
     # connect clos fabric -  servers
-    lab.create_link(server1.get_interface_by_label('eth0'),
+    lab.create_link(server1.get_interface_by_label('enp0s2'),
                     leaf1.get_interface_by_label('GigabitEthernet0/3'))
-    lab.create_link(server2.get_interface_by_label('eth0'),
+    lab.create_link(server2.get_interface_by_label('enp0s2'),
                     leaf5.get_interface_by_label('GigabitEthernet0/3'))
 
     # connect OOB conns for servers
-    lab.create_link(server1.get_interface_by_label('eth1'),
+    lab.create_link(server1.get_interface_by_label('enp0s3'),
                      switch2.get_interface_by_label('port2'))
-    lab.create_link(server2.get_interface_by_label('eth1'),
+    lab.create_link(server2.get_interface_by_label('enp0s3'),
                      switch2.get_interface_by_label('port3'))
 
 
@@ -148,18 +148,39 @@ try:
     # set server1 bootstrap config
     print(f"\nBootstrapping server configs..")
     servers = [server1, server2]
-    x = 208
-    y = 100
+    x = 100
+    y = 208
     for server in servers:
         server_config = (
-            f"hostname {server.label}\n"
-            f"ifconfig eth0 192.168.{y}.{x} netmask 255.255.255.0 up\n"
-            f"ifconfig eth1 192.168.137.{x} netmask 255.255.255.0 up\n"
-            f"route add -net 0.0.0.0/0 dev eth1\n"
-            f"route add -net 150.1.0.0/16 dev eth0\n"
-            f"route add -net 192.168.0.0/16 dev eth0\n")
-        x += 1
-        y += 100
+            f"#cloud-config\n"
+            f"password: cisco\n"
+            f"chpasswd: {{ expire: False }}\n"
+            f"hostname: {server.label}\n"
+            f"ssh_pwauth: True\n"
+            f"write_files:\n"
+            f"- path: /etc/netplan/50-cloud-init.yaml\n"
+            f"  permissions: '0644'\n"
+            f"  content: |\n"
+            f"    network:\n"
+            f"      version: 2\n"
+            f"      ethernets:\n"
+            f"        ens2:\n"
+            f"          addresses: [192.168.{x}.2/24]\n"
+            f"          routes:\n"
+            f"            - to: 192.168.0.0/16\n"
+            f"              via: 192.168.{x}.1\n"
+            f"            - to: 150.1.0.0/16\n"
+            f"              via: 192.168.{x}.1\n"
+            f"        ens3:\n"
+            f"          addresses:\n"
+            f"            - 192.168.137.{y}/24\n"
+            f"          gateway4: 192.168.137.1\n"
+            f"          nameservers:\n"
+            f"            addresses: [192.168.137.1, 8.8.8.8]\n"
+            f"runcmd:\n"
+            f"  - [sudo, netplan, apply]\n"
+            )
+        x += 100
         server.config = server_config
 
     # start nodes incrementally
@@ -183,6 +204,8 @@ try:
 
 except Exception as e:
     print(f"\nError creating lab, {e}")
+
+sys.exit(0)
 
 # wait 3 mins for topology to start
 time.sleep(180)
