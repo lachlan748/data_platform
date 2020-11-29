@@ -179,8 +179,11 @@ try:
             f"            addresses: [192.168.137.1, 8.8.8.8]\n"
             f"runcmd:\n"
             f"  - [sudo, netplan, apply]\n"
+            f"  - [sudo, ufw, allow, ssh]\n"
+            f"  - [sudo, ufw, enable]\n"
             )
         x += 100
+        y += 1
         server.config = server_config
 
     # start nodes incrementally
@@ -193,7 +196,7 @@ try:
     for node in nodes:
         print(f"\nStarting node: {node}")
         node.start()
-        # 20sec delay before starting each veos node
+        # 20sec delay before starting each iosv node
         time.sleep(20)
     print(f"\nStarting node: server1")
     server1.start()
