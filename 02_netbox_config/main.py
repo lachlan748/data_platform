@@ -340,6 +340,7 @@ with open('./interfaces.yml', 'r') as f:
 
 # build out master dict for each node
 print(f"\nBuilding python dict of node and interface data...")
+x = 201
 for node, node_data in clos.items():
     device_type = iosv.id
     device_role = leaf.id
@@ -351,8 +352,8 @@ for node, node_data in clos.items():
     site = ld4.id
     status = 'active'
     # set primary_ip4
-    x = node[-1]
-    primary_ip4 = {'address': f'150.1.{x}.{x}/32'}
+    primary_ip4 = {'address': f'192.168.137.{x}/32'}
+    x += 1
     interfaces = {}
     for intf, intf_data in node_data.items():
         # create empty dict per interface
@@ -425,11 +426,6 @@ for node, node_data in master.items():
                     assigned_object_type='dcim.interface'
                     )
 
-                # now set Loopback0 as the primary mgmt interface
-                print(f"\nSetting Loopback0 as primary_ip4 interface...")
-                node_new.primary_ip4 = {'address': intf_data['ip']}
-                node_new.save()
-
             # update iosv device template interfaces
             elif intf.lower().startswith('gigabit'):
                 print(f"\nUpdating {intf} details...")
@@ -456,6 +452,11 @@ for node, node_data in master.items():
                     print(f"\nUpdating {intf} with VRF data...")
                     intf_ip.vrf = mgmt_vrf.id
                     intf_ip.save()
+
+                    # now set GigabitEthernet0/0 as the primary mgmt interface
+                    print(f"\nSetting Gig0/0 as primary_ip4 interface...")
+                    node_new.primary_ip4 = {'address': intf_data['ip']}
+                    node_new.save()
 
 
 # define patch function
