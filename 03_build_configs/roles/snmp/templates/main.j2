@@ -2,8 +2,9 @@ snmp-server chassis-id {{ inventory_hostname | upper }}
 snmp-server contact {{ snmp_contact }}
 snmp-server location {{ snmp_location }}
 snmp-server community {{ snmp_ro_string }} ro
-snmp-server host {{ snmp_trap_server }} vrf mgmt
+snmp-server host {{ snmp_trap_server }} vrf mgmt upstart_crow
 !
+access-list 10 permit 239.0.0.0 0.255.255.255
 access-list 100 deny udp host 192.168.137.1 eq bootps any eq bootpc
 access-list 100 permit ip any any
 !

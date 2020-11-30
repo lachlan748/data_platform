@@ -11,6 +11,9 @@ interface {{ intf.name }}
  ip address {{ ip.address|ipaddr('address') }} {{ ip.address|ipaddr('netmask') }}
 {%              endif %}
 {%      endfor %}
+{%      if intf.name|lower != 'gigabitethernet0/0' %}
+ ip pim sparse-mode
+{%	endif %}
 {%      if intf.name|lower == 'gigabitethernet0/0' %}
  ip access-group 100 in
 {%      endif %}

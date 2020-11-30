@@ -1,0 +1,24 @@
+---
+- hosts: all
+  connection: network_cli
+  become: no
+  gather_facts: False
+  vars:
+    netbox_host: http://192.168.137.100:8000
+    netbox_token: 0123456789abcdef0123456789abcdef01234567
+    working_dir: results
+  tasks:
+    - name: Gather ios facts
+      ios_facts:
+        gather_subset: min
+        gather_network_resources: "{{ item }}"
+      loop:
+        - interfaces
+        - l2_interfaces
+        - l3_interfaces
+        - lacp_interfaces
+        - lldp_global
+      register: info
+
+    - debug:
+        msg: "{{ info }} "

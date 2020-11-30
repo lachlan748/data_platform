@@ -1,0 +1,7 @@
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip pim rp-address 150.1.5.5 10

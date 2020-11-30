@@ -82,6 +82,7 @@
     - header
     - interface
     - bgp
+    - middle
     - static_route
     - syslog
     - snmp
