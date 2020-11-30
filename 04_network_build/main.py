@@ -209,6 +209,7 @@ except Exception as e:
     print(f"\nError creating lab, {e}")
 
 # wait 3 mins for topology to start
+print(f"\nWaiting 3 mins for all nodes to complete their startup...")
 time.sleep(180)
 
 # generate ssh rsa keys using telnet
