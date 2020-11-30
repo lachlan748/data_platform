@@ -46,10 +46,8 @@ try:
     spine1 = lab.create_node("spine1", "iosv", 300, 100, populate_interfaces=True)
     spine2 = lab.create_node("spine2", "iosv", 500, 100, populate_interfaces=True)
     leaf1 = lab.create_node("leaf1", "iosv", 0, 300, populate_interfaces=True)
-    leaf2 = lab.create_node("leaf2", "iosv", 200, 300, populate_interfaces=True)
-    leaf3 = lab.create_node("leaf3", "iosv", 400, 300, populate_interfaces=True)
-    leaf4 = lab.create_node("leaf4", "iosv", 600, 300, populate_interfaces=True)
-    leaf5 = lab.create_node("leaf5", "iosv", 800, 300, populate_interfaces=True)
+    leaf2 = lab.create_node("leaf2", "iosv", 400, 300, populate_interfaces=True)
+    leaf3 = lab.create_node("leaf3", "iosv", 800, 300, populate_interfaces=True)
     switch1 = lab.create_node("switch1",
         "unmanaged_switch", 550, 500, populate_interfaces=True)
     switch2 = lab.create_node("switch2",
@@ -58,24 +56,15 @@ try:
     server1 = lab.create_node("server1", "ubuntu", 0, 100, populate_interfaces=True)
     server2 = lab.create_node("server2", "ubuntu", 800, 100, populate_interfaces=True)
 
-    # create additional interfaces for spines
-    print(f"\nCreating additional interfaces to spines..")
-    spines = [spine1, spine2]
-    iosv_intf_list = ['GigabitEthernet0/4', 'GigabitEthernet0/5']
-    for node in spines:
-        for intf in iosv_intf_list:
-            print(f"\nAdding {intf} to {node}")
-            intf = node.create_interface()
-
     # create additional interfaces for servers
     print(f"\nCreating additional interfaces for servers..")
     servers = [server1, server2]
     for server in servers:
-        print(f"\nAdding enp0s3 to {node}")
+        print(f"\nAdding enp0s3 to {server}")
         intf = server.create_interface()
 
     # place all nodes in a list
-    nodes = [spine1, spine2, leaf1, leaf2, leaf3, leaf4, leaf5]
+    nodes = [spine1, spine2, leaf1, leaf2, leaf3]
 
     # connect clos fabric - spine1
     print(f"\nConnecting topology..")
@@ -85,10 +74,6 @@ try:
                     leaf2.get_interface_by_label('GigabitEthernet0/1'))
     lab.create_link(spine1.get_interface_by_label('GigabitEthernet0/3'),
                     leaf3.get_interface_by_label('GigabitEthernet0/1'))
-    lab.create_link(spine1.get_interface_by_label('GigabitEthernet0/4'),
-                    leaf4.get_interface_by_label('GigabitEthernet0/1'))
-    lab.create_link(spine1.get_interface_by_label('GigabitEthernet0/5'),
-                    leaf5.get_interface_by_label('GigabitEthernet0/1'))
 
     # connect clos fabric - spine2
     lab.create_link(spine2.get_interface_by_label('GigabitEthernet0/1'),
@@ -97,16 +82,12 @@ try:
                     leaf2.get_interface_by_label('GigabitEthernet0/2'))
     lab.create_link(spine2.get_interface_by_label('GigabitEthernet0/3'),
                     leaf3.get_interface_by_label('GigabitEthernet0/2'))
-    lab.create_link(spine2.get_interface_by_label('GigabitEthernet0/4'),
-                    leaf4.get_interface_by_label('GigabitEthernet0/2'))
-    lab.create_link(spine2.get_interface_by_label('GigabitEthernet0/5'),
-                    leaf5.get_interface_by_label('GigabitEthernet0/2'))
 
     # connect clos fabric -  servers
     lab.create_link(server1.get_interface_by_label('enp0s2'),
                     leaf1.get_interface_by_label('GigabitEthernet0/3'))
     lab.create_link(server2.get_interface_by_label('enp0s2'),
-                    leaf5.get_interface_by_label('GigabitEthernet0/3'))
+                    leaf3.get_interface_by_label('GigabitEthernet0/3'))
 
     # connect OOB conns for servers
     lab.create_link(server1.get_interface_by_label('enp0s3'),
@@ -149,7 +130,7 @@ try:
     print(f"\nBootstrapping server configs..")
     servers = [server1, server2]
     x = 100
-    y = 208
+    y = 206
     for server in servers:
         server_config = (
             f"#cloud-config\n"

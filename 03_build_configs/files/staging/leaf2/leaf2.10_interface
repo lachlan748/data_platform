@@ -9,7 +9,7 @@ interface GigabitEthernet0/0
  media-type rj45
 !
 interface GigabitEthernet0/1
- description SPINE1_GIG0/2
+ description SPINE1_GIG0/3
  ip address 155.1.11.3 255.255.255.254
  ip pim sparse-mode
  no shutdown
@@ -18,7 +18,7 @@ interface GigabitEthernet0/1
  media-type rj45
 !
 interface GigabitEthernet0/2
- description SPINE2_GIG0/2
+ description SPINE2_GIG0/3
  ip address 155.1.11.13 255.255.255.254
  ip pim sparse-mode
  no shutdown
@@ -28,21 +28,7 @@ interface GigabitEthernet0/2
 !
 interface GigabitEthernet0/3
  ip pim sparse-mode
- shutdown
- duplex auto
- speed auto
- media-type rj45
-!
-interface GigabitEthernet0/4
- ip pim sparse-mode
- shutdown
- duplex auto
- speed auto
- media-type rj45
-!
-interface GigabitEthernet0/5
- ip pim sparse-mode
- shutdown
+ no shutdown
  duplex auto
  speed auto
  media-type rj45

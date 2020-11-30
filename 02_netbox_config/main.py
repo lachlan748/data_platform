@@ -283,7 +283,7 @@ create_device_type('iosv', cisco)
 iosv = nb.dcim.device_types.get(name="iosv")
 
 # create ios interface template
-ios_interfaces = ['GigabitEthernet0/{0..5}']
+ios_interfaces = ['GigabitEthernet0/{0..3}']
 
 # create an empty set
 asserted_ios_interface_list = set()
@@ -328,7 +328,7 @@ for intf, intf_data in interface_data.items():
         print(e.error)
 
 # create node list:
-nodes = ['spine1', 'spine2', 'leaf1', 'leaf2', 'leaf3', 'leaf4', 'leaf5']
+nodes = ['spine1', 'spine2', 'leaf1', 'leaf2', 'leaf3']
 
 # create an empty dict to store all device data
 master = {}
@@ -486,13 +486,11 @@ spine2 = get_node('spine2')
 leaf1 = get_node('leaf1')
 leaf2 = get_node('leaf2')
 leaf3 = get_node('leaf3')
-leaf4 = get_node('leaf4')
-leaf5 = get_node('leaf5')
 
 # patch cables
-leafs = [leaf1, leaf2, leaf3, leaf4, leaf5]
+leafs = [leaf1, leaf2, leaf3]
 x = 1
-while x < 6:
+while x < 4:
     for leaf in leafs:
         print(f"\nConnecting {leaf} to spines...")
         patch_cables(spine1, leaf, f"GigabitEthernet0/{x}",
@@ -501,16 +499,9 @@ while x < 6:
                      f"GigabitEthernet0/2")
         x += 1
 
-# shutdown unused leaf interfaces
-disabled_intf = ['GigabitEthernet0/3', 'GigabitEthernet0/4', 'GigabitEthernet0/5']
+# enable gig0/3 for server connectivity
 for node in leafs:
-    for intf in disabled_intf:
-        print(f"\nDisabling leaf interfaces {intf}...")
-        nbintf = nb.dcim.interfaces.get(name=intf, device=node)
-        nbintf.enabled = False
-        nbintf.save()
-    # enable gig0/3 for server connectivity
-    if node in [leaf1, leaf5]:
+    if node in [leaf1, leaf3]:
         print(f"\nEnabled GigabitEthernet0/3 on {node}...")
         gig3 = nb.dcim.interfaces.get(name='GigabitEthernet0/3', device=node)
         gig3.enabled = True

@@ -1,9 +1,0 @@
-router bgp 65005
- bgp router-id 150.1.7.7
- bgp log-neighbor-changes
- network 192.168.200.0 mask 255.255.255.0
- network 150.1.7.7 mask 255.255.255.255
- neighbor 155.1.11.8 remote-as 65000
- neighbor 155.1.11.18 remote-as 65000
- maximum-paths 2
-!

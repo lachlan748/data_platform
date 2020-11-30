@@ -48,6 +48,7 @@ multilink bundle-name authenticated
 !
 redundancy
 !
+lldp run
 !
 ! 
 !

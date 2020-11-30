@@ -15,12 +15,6 @@ spine1:
   GigabitEthernet0/3:
     description: 'leaf3_gig0/1'
     ip: '155.1.11.4/31'
-  GigabitEthernet0/4:
-    description: 'leaf4_gig0/1'
-    ip: '155.1.11.6/31'
-  GigabitEthernet0/5:
-    description: 'leaf5_gig0/1'
-    ip: '155.1.11.8/31'
 
 spine2:
   Loopback0:
@@ -38,12 +32,6 @@ spine2:
   GigabitEthernet0/3:
     description: 'leaf3_gig0/2'
     ip: '155.1.11.14/31'
-  GigabitEthernet0/4:
-    description: 'leaf4_gig0/2'
-    ip: '155.1.11.16/31'
-  GigabitEthernet0/5:
-    description: 'leaf5_gig0/2'
-    ip: '155.1.11.18/31'
 
 leaf1:
   Loopback0:
@@ -62,7 +50,6 @@ leaf1:
     description: 'server_LAN'
     ip: '192.168.100.1/24'
 
-
 leaf2:
   Loopback0:
     description: 'rid_intf'
@@ -71,10 +58,10 @@ leaf2:
     description: 'oob_mgmt_intf'
     ip: '192.168.137.204/24'
   GigabitEthernet0/1:
-    description: 'spine1_gig0/2'
+    description: 'spine1_gig0/3'
     ip: '155.1.11.3/31'
   GigabitEthernet0/2:
-    description: 'spine2_gig0/2'
+    description: 'spine2_gig0/3'
     ip: '155.1.11.13/31'
 
 leaf3:
@@ -85,39 +72,11 @@ leaf3:
     description: 'oob_mgmt_intf'
     ip: '192.168.137.205/24'
   GigabitEthernet0/1:
-    description: 'spine1_gig0/3'
+    description: 'spine1_gig0/5'
     ip: '155.1.11.5/31'
   GigabitEthernet0/2:
-    description: 'spine2_gig0/3'
-    ip: '155.1.11.15/31'
-
-leaf4:
-  Loopback0:
-    description: 'rid_intf'
-    ip: '150.1.6.6/32'
-  GigabitEthernet0/0:
-    description: 'oob_mgmt_intf'
-    ip: '192.168.137.206/24'
-  GigabitEthernet0/1:
-    description: 'spine1_gig0/4'
-    ip: '155.1.11.7/31'
-  GigabitEthernet0/2:
-    description: 'spine2_gig0/4'
-    ip: '155.1.11.17/31'
-
-leaf5:
-  Loopback0:
-    description: 'rid_intf'
-    ip: '150.1.7.7/32'
-  GigabitEthernet0/0:
-    description: 'oob_mgmt_intf'
-    ip: '192.168.137.207/24'
-  GigabitEthernet0/1:
-    description: 'spine1_gig0/5'
-    ip: '155.1.11.9/31'
-  GigabitEthernet0/2:
     description: 'spine2_gig0/5'
-    ip: '155.1.11.19/31'
+    ip: '155.1.11.15/31'
   GigabitEthernet0/3:
     description: 'server_LAN'
     ip: '192.168.200.1/24'

@@ -35,24 +35,6 @@ interface GigabitEthernet0/3
  speed auto
  media-type rj45
 !
-interface GigabitEthernet0/4
- description LEAF4_GIG0/1
- ip address 155.1.11.6 255.255.255.254
- ip pim sparse-mode
- no shutdown
- duplex auto
- speed auto
- media-type rj45
-!
-interface GigabitEthernet0/5
- description LEAF5_GIG0/1
- ip address 155.1.11.8 255.255.255.254
- ip pim sparse-mode
- no shutdown
- duplex auto
- speed auto
- media-type rj45
-!
 interface Loopback0
  description RID_INTF
  ip address 150.1.1.1 255.255.255.255
