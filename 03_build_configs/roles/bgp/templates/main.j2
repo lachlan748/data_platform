@@ -14,7 +14,7 @@ router bgp {{ 65000 + inventory_hostname[-1]|int }}
 {%		if ip.assigned_object.name == intf.name %}
 {%			if intf.name|lower == 'loopback0' %}
  network {{ ip.address|ipaddr('address') }} mask {{ ip.address|ipaddr('netmask') }}
-{%			elif inventory_hostname in ['leaf1', 'leaf5'] and intf.name|lower == 'gigabitethernet0/3' %}
+{%			elif inventory_hostname in ['leaf1', 'leaf3'] and intf.name|lower == 'gigabitethernet0/3' %}
  network {{ ip.address|ipaddr('network') }} mask {{ ip.address|ipaddr('netmask') }}
 {%			endif %}
 {%		endif %}

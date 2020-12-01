@@ -126,3 +126,37 @@
       community.general.docker_compose:
         project_src: ./projects/netbox
         state: present
+
+# setup ansible AWX
+- hosts: data_controller
+  gather_facts: False
+  become: yes
+  tasks:
+    - name: create projects/awx directory
+      file:
+        path: projects/awx
+        state: directory
+        mode: 0755
+        owner: "{{ ansible_user }}"
+        group: docker
+
+    - name: git checkout awx
+      git:
+        repo: https://github.com/ansible/awx.git
+        dest: projects/awx
+
+    - name: install ansible
+      pip:
+        name: ansible
+        executable: pip3
+
+    - name: install libselinux-python3
+      yum:
+        name: libselinux-python3
+        state: latest
+
+    - name: run awx install playbook
+      shell:
+        cmd: ansible-playbook -i inventory install.yml
+        chdir: projects/awx/installer
+  tags: awx
