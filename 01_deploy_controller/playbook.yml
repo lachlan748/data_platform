@@ -109,6 +109,7 @@
         repo: https://github.com/netbox-community/netbox-docker.git
         version: release
         dest: projects/netbox
+        force: yes
 
     - name: copy docker-compose.override.yml over
       copy:
@@ -122,10 +123,27 @@
         name: netboxcommunity/netbox:latest
         source: pull
 
+    - name: edit netbox.env file, add napalm username
+      lineinfile:
+         path: projects/netbox/env/netbox.env
+         regexp: '^NAPALM_USERNAME='
+         line: 'NAPALM_USERNAME=cisco'
+         owner: root
+
+    - name: edit netbox.env file, add napalm password
+      lineinfile:
+         path: projects/netbox/env/netbox.env
+         regexp: '^NAPALM_PASSWORD='
+         line: 'NAPALM_PASSWORD=cisco'
+         owner: root
+
     - name: start netbox container
+      vars:
+        ansible_python_interpreter: /usr/bin/python3
       community.general.docker_compose:
         project_src: ./projects/netbox
         state: present
+  tags: netbox
 
 # setup ansible AWX
 - hosts: data_controller
