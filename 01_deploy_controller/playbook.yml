@@ -119,6 +119,8 @@
         group: docker
 
     - name: pull netbox image from hub.docker.com
+      vars:
+        ansible_python_interpreter: /usr/bin/python3
       community.general.docker_image:
         name: netboxcommunity/netbox:latest
         source: pull
