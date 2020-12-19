@@ -1,7 +1,9 @@
 import netaddr
 import pynetbox
+import sys
 import yaml
 from braceexpand import braceexpand
+from pprint import pprint
 
 
 # set netbox-docker api address and token
@@ -85,8 +87,10 @@ def create_device_role(role):
 # create roles
 create_device_role('spine')
 create_device_role('leaf')
+create_device_role('server')
 spine = nb.dcim.device_roles.get(name='spine')
 leaf = nb.dcim.device_roles.get(name='leaf')
+server = nb.dcim.device_roles.get(name='server')
 
 # get active RIR's
 print(f"\nChecking IPAM RIR's...")
@@ -238,30 +242,44 @@ def create_manufacturer(name):
             )
 
 
-# add 'cisco' as a new manufacturer
+# add 'cisco' and 'linux' as new manufacturers
 create_manufacturer('cisco')
+create_manufacturer('linux')
 cisco = nb.dcim.manufacturers.get(name='cisco')
+linux = nb.dcim.manufacturers.get(name='linux')
 
 # get platforms
 print(f"\nChecking DCIM platforms...")
 all_platforms = nb.dcim.platforms.all()
 
 
-def create_platform(name, vendor):
+def create_network_platform(name, vendor, napalm_driver):
     slug = name.lower()
     if name not in [x.name for x in all_platforms]:
         print(f"\nCreating {name} DCIM platform...")
         platform = nb.dcim.platforms.create(
             name=name,
             manufacturer=vendor.id,
-            napalm_driver=name,
+            napalm_driver=napalm_driver,
+            slug=slug
+            )
+
+def create_server_platform(name, vendor):
+    slug = name.lower()
+    if name not in [x.name for x in all_platforms]:
+        print(f"\nCreating {name} DCIM platform...")
+        platform = nb.dcim.platforms.create(
+            name=name,
+            manufacturer=vendor.id,
             slug=slug
             )
 
 
-# add 'ios' as a new platform
-create_platform('ios', cisco)
+# add 'ios' and ubuntu as new platforms
+create_network_platform('ios', cisco, 'ios')
+create_server_platform('ubuntu1804', linux)
 ios = nb.dcim.platforms.get(name='ios')
+ubuntu1804 = nb.dcim.platforms.get(name='ubuntu1804')
 
 # get device_types
 all_device_types = nb.dcim.device_types.all()
@@ -278,22 +296,31 @@ def create_device_type(name, vendor):
             )
 
 
-# add 'iosv' as a device_type
+# add 'iosv' and ubuntu as device_types
 create_device_type('iosv', cisco)
-iosv = nb.dcim.device_types.get(name="iosv")
+create_device_type('ubuntu1804_cloud_init', linux)
+iosv = nb.dcim.device_types.get(model="iosv")
+ubuntu1804_cloud_init = nb.dcim.device_types.get(model="ubuntu1804_cloud_init")
 
-# create ios interface template
+# create ios, ubuntu interface template
 ios_interfaces = ['GigabitEthernet0/{0..3}']
+ubuntu_interfaces = ['ens2', 'ens3']
 
 # create an empty set
 asserted_ios_interface_list = set()
+asserted_ubuntu_interface_list = set()
 
 # build set of ios interfaces
 for port in ios_interfaces:
     asserted_ios_interface_list.update(braceexpand(port))
 
+for port in ubuntu_interfaces:
+    asserted_ubuntu_interface_list.add(port)
+
 # convert set to dict and set port speed
 interface_data = {}
+
+# iterate over ios interfaces
 for port in asserted_ios_interface_list:
     data = {}
     intf_type = '1000base-t'
@@ -305,7 +332,19 @@ for port in asserted_ios_interface_list:
                                mgmt_only=mgmt_status, type=intf_type))
     interface_data.update(data)
 
-# add interface template for ios to netbox:
+# iterate over ubuntu interfaces
+for port in asserted_ubuntu_interface_list:
+    data = {}
+    intf_type = '1000base-t'
+    mgmt_status = False
+    # set gig0/0 as oob_mgmt port
+    if port == 'ens3':
+        mgmt_status = True
+    data.setdefault(port, dict(device_type=ubuntu1804_cloud_init.id, name=port,
+                               mgmt_only=mgmt_status, type=intf_type))
+    interface_data.update(data)
+
+# add interface template for ios and ubuntu to netbox:
 print(f"\nChecking DCIM interface templates...")
 for intf, intf_data in interface_data.items():
     try:
@@ -328,7 +367,7 @@ for intf, intf_data in interface_data.items():
         print(e.error)
 
 # create node list:
-nodes = ['spine1', 'spine2', 'leaf1', 'leaf2', 'leaf3']
+nodes = ['spine1', 'spine2', 'leaf1', 'leaf2', 'leaf3', 'server1', 'server2']
 
 # create an empty dict to store all device data
 master = {}
@@ -342,15 +381,20 @@ with open('./interfaces.yml', 'r') as f:
 print(f"\nBuilding python dict of node and interface data...")
 x = 201
 for node, node_data in clos.items():
-    device_type = iosv.id
-    device_role = leaf.id
+    tenant = upstart_crow.id
+    site = ld4.id
+    status = 'active'
+    if node.startswith('server'):
+        device_type = ubuntu1804_cloud_init.id
+        device_role = server.id
+        platform = ubuntu1804.id
+    else:
+        device_type = iosv.id
+        device_role = leaf.id
+        platform = ios.id
     # set spine device_role
     if node.startswith('spine'):
         device_role = spine.id
-    tenant = upstart_crow.id
-    platform = ios.id
-    site = ld4.id
-    status = 'active'
     # set primary_ip4
     primary_ip4 = {'address': f'192.168.137.{x}/32'}
     x += 1
@@ -427,7 +471,7 @@ for node, node_data in master.items():
                     )
 
             # update iosv device template interfaces
-            elif intf.lower().startswith('gigabit'):
+            elif intf.lower().startswith(('gigabit', 'ens')):
                 print(f"\nUpdating {intf} details...")
                 nbintf = nb.dcim.interfaces.get(name=intf, device=node)
                 nbintf.description = intf_data['description']
@@ -455,6 +499,12 @@ for node, node_data in master.items():
 
                     # now set GigabitEthernet0/0 as the primary mgmt interface
                     print(f"\nSetting Gig0/0 as primary_ip4 interface...")
+                    node_new.primary_ip4 = {'address': intf_data['ip']}
+                    node_new.save()
+
+                # update server primary_ip
+                if intf.lower() == 'ens3':
+                    print(f"\nSetting {intf} as primary_ip4 interface...")
                     node_new.primary_ip4 = {'address': intf_data['ip']}
                     node_new.save()
 
