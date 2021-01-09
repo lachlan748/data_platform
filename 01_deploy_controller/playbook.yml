@@ -147,46 +147,46 @@
         state: present
   tags: netbox
 
-# setup ansible AWX
-- hosts: data_controller
-  gather_facts: False
-  become: yes
-  tasks:
-    - name: create projects/awx directory
-      file:
-        path: projects/awx
-        state: directory
-        mode: 0755
-        owner: "{{ ansible_user }}"
-        group: docker
-
-    - name: git checkout awx
-      git:
-        repo: https://github.com/ansible/awx.git
-        dest: projects/awx
-        update: no
-
-    - name: edit awx installer file - change http port number
-      lineinfile:
-         path: projects/awx/installer/inventory
-         regexp: '^host_port=80'
-         line: 'host_port=9000'
-         owner: root
-
-    - name: install ansible
-      pip:
-        name: ansible
-        executable: pip3
-
-    - name: install libselinux-python3
-      yum:
-        name: libselinux-python3
-        state: latest
-
-    - name: run awx install playbook
-      shell:
-        cmd: "ansible-playbook install.yml -i inventory"
-        chdir: "projects/awx/installer"
-      environment:
-        PATH: '/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/"{{ ansible_user }}"/.local/bin:/home/"{{ ansible_user }}"/bin'
-  tags: awx
+    ## setup ansible AWX
+    #- hosts: data_controller
+    #  gather_facts: False
+    #  become: yes
+    #  tasks:
+    #    - name: create projects/awx directory
+    #      file:
+    #        path: projects/awx
+    #        state: directory
+    #        mode: 0755
+    #        owner: "{{ ansible_user }}"
+    #        group: docker
+    #
+    #    - name: git checkout awx
+    #      git:
+    #        repo: https://github.com/ansible/awx.git
+    #        dest: projects/awx
+    #        update: no
+    #
+    #    - name: edit awx installer file - change http port number
+    #      lineinfile:
+    #         path: projects/awx/installer/inventory
+    #         regexp: '^host_port=80'
+    #         line: 'host_port=9000'
+    #         owner: root
+    #
+    #    - name: install ansible
+    #      pip:
+    #        name: ansible
+    #        executable: pip3
+    #
+    #    - name: install libselinux-python3
+    #      yum:
+    #        name: libselinux-python3
+    #        state: latest
+    #
+    #    - name: run awx install playbook
+    #      shell:
+    #        cmd: "ansible-playbook install.yml -i inventory"
+    #        chdir: "projects/awx/installer"
+    #      environment:
+    #        PATH: '/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/"{{ ansible_user }}"/.local/bin:/home/"{{ ansible_user }}"/bin'
+    #  tags: awx

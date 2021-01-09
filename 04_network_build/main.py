@@ -158,6 +158,8 @@ try:
             f"          gateway4: 192.168.137.1\n"
             f"          nameservers:\n"
             f"            addresses: [192.168.137.1, 8.8.8.8]\n"
+            f"repo_update: true\n"
+            f"repo_upgrade: all\n"
             f"runcmd:\n"
             f"  - [sudo, netplan, apply]\n"
             f"  - [sudo, ufw, allow, ssh]\n"

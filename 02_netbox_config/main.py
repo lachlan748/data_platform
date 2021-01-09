@@ -536,6 +536,8 @@ spine2 = get_node('spine2')
 leaf1 = get_node('leaf1')
 leaf2 = get_node('leaf2')
 leaf3 = get_node('leaf3')
+server1 = get_node('server1')
+server2 = get_node('server2')
 
 # patch cables
 leafs = [leaf1, leaf2, leaf3]

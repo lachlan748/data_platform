@@ -11,11 +11,8 @@ The goal of this project is to simulate a production network using code.
 
 *  Generate and deploy network configuration files using Ansible Roles + Netbox
 
-*  Connect immutable servers to the topology and simulate production
-   network traffic including unicast and multicast data flows.
-
-*  Monitor data flows, resource utliisation and telemetry data, visualize
-   using Kibana/Grafana.
+*  Connect immutable servers to either side of the topology and ensure
+   reachability across the network.
 
 ### Infrastructure
 
@@ -63,8 +60,7 @@ This build assumes:
 
 ### 1. Data Controller
 
-1. Setup your controller node by installing Centos 7. This node will host
-   netbox, ELK and Ansible Tower (AWX).
+1. Setup your controller node by installing Centos 7. This node host netbox.
 
 2. Once the OS is installed, copy your desktop SSH private key onto the
    controller:
@@ -100,8 +96,8 @@ Netbox should now be accessible on http://192.168.137.100:8000
 
 ### 3. Generate network node config files
 
-1. Move to the 04_network_build directory
-   ```cd 04_build_configs```
+1. Move to the 03_build_configs directory
+   ```cd 03_build_configs```
 
 2. Get Ansible to generate the network config files based on data in Netbox,
    execute:
@@ -111,8 +107,8 @@ Config files will be stored in files/complete/ directory.
 
 ### 4. Create the topology and bootstrap network nodes
 
-1. Move to 03_network_build
-   ```cd 03_network_build```
+1. Move to 04_network_build
+   ```cd 04_network_build```
 
 2. Create the virtual network topology into CML, execute:
    ```python3 main.py```
