@@ -1,0 +1,14 @@
+---
+- hosts: all
+  connection: network_cli
+  become: no
+  gather_facts: no
+  tasks:
+    - name: run show command
+      cisco.ios.ios_command:
+        commands: 'show ip route | begin Gateway'
+      when: ansible_network_os == 'ios'
+      register: output
+    - ansible.builtin.debug: 
+        var: output
+      when: ansible_network_os == 'ios'

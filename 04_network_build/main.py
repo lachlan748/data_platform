@@ -23,23 +23,23 @@ except:
 # get list of labs
 all_labs = client.all_labs()
 
-# check if data_platform exists
-if 'data_platform' in [lab.title for lab in all_labs]:
-    print(f"\ndata_platform exists, deleting lab..")
-    lab = client.find_labs_by_title(title='data_platform')[0]
+# check if programmatic_network_build exists
+if 'programmatic_network_build' in [lab.title for lab in all_labs]:
+    print(f"\nprogrammatic_network_build exists, deleting lab..")
+    lab = client.find_labs_by_title(title='programmatic_network_build')[0]
     try:
         lab.stop()
         lab.wipe()
         lab.remove()
     except Exception as e:
-        print(f"Unable to stop data_platform lab, error: {e}")
-    print(f"\ndata_platform has been successfully deleted..")
+        print(f"Unable to stop programmatic_network_build lab, error: {e}")
+    print(f"\nprogrammatic_network_build has been successfully deleted..")
 
-print(f"\ndata_platform doesn't exist, creating lab..")
+print(f"\nprogrammatic_network_build doesn't exist, creating lab..")
 
-# create new data_platform lab
+# create new programmatic_network_build lab
 try:
-    lab = client.create_lab(title='data_platform')
+    lab = client.create_lab(title='programmatic_network_build')
 
     # create nodes
     print(f"\nCreating nodes..")
